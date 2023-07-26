@@ -1,0 +1,135 @@
+"Light Green: Default soundslots
+Dark green: Advanced soundslots
+Orange: BG2EE soundslots that work in BGEE";;;;
+POSITION;"     Example MALE/ DEFAULT     
+In Character Creation";SLOT-NAME;EVENT TRIGGER;POSTFIX
+1;-1;;;
+2;-1;;;
+3;-1;;;
+4;-1;;;
+5;-1;;;
+6;16236;LEADER;"The specific character portrait is 
+Dragged and dropped to the very top";b
+7;16237;TIRED;"Character is tired
+e.g. after a long journey without a break";c
+8;16238;BORED;The character stands still for a while;d
+9;16235;BATTLE_CRY1;A creature is attacked;a
+10;25427;BATTLE_CRY2;A creature is attacked;8
+11;25429;BATTLE_CRY3;A creature is attacked;9
+12;-1;BATTLE_CRY4;A creature is attacked;g_
+13;-1;BATTLE_CRY5;A creature is attacked;h_
+14;-1;;;
+15;-1;;;
+16;-1;;;
+17;-1;;;
+18;16246;DAMAGE;Character is hit;l
+19;16247;DYING;"Character is hit and
+His hit points become zero";m
+20;16239;HURT;"Character is hit and
+His hit points become very low";e
+21;-1;;;
+22;-1;;;
+23;-1;;;
+24;-1;;;
+25;-1;;;
+26;16240;SELECT_COMMON1;"The character is selected
+e.g. with a left mouse click";f
+27;16241;SELECT_COMMON2;"The character is selected
+e.g. with a left mouse click";g
+28;16242;SELECT_COMMON3;"The character is selected
+e.g. with a left mouse click";h
+29;-1;SELECT_COMMON4;"The character is selected
+e.g. with a left mouse click";0
+30;-1;SELECT_COMMON5;"The character is selected
+e.g. with a left mouse click";k_
+31;-1;SELECT_COMMON6;"The character is selected
+e.g. with a left mouse click";l_
+32;16243;SELECT_ACTION1;"After selecting the character, 
+Move it to another position";i
+33;16244;SELECT_ACTION2;"After selecting the character, 
+Move it to another position";j
+34;16245;SELECT_ACTION3;"After selecting the character, 
+Move it to another position";k
+35;-1;SELECT_ACTION4;"The character is repeatedly selected
+e.g. with a left mouse click ";0_
+36;-1;SELECT_ACTION5;"The character is repeatedly selected
+e.g. with a left mouse click";1_
+37;-1;SELECT_ACTION6;"The character is repeatedly selected
+e.g. with a left mouse click";2_
+38;-1;SELECT_ACTION7;"The character is repeatedly selected
+e.g. with a left mouse click";3_
+39;-1;;;
+40;-1;;;
+41;-1;;;
+42;-1;;;
+43;-1;;;
+44;-1;;;
+45;-1;;;
+46;-1;;;
+47;-1;;;
+48;-1;;;
+49;-1;;;
+50;-1;;;
+51;-1;;;
+52;-1;;;
+53;-1;REACT_TO_DIE_GENERAL;Happens when a party member dies;w
+54;-1;;;
+55;-1;;;
+56;-1;;;
+57;-1;;;
+58;-1;;;
+59;-1;;;
+60;-1;;;
+61;-1;;;
+62;-1;;;
+63;-1;;;
+64;-1;;;
+65;-1;CRITICAL_HIT;"When the character attacks 
+With a critical hit";z
+66;-1;CRITICAL_MISS;"When the character attacks 
+With a critical miss";1
+67;-1;TARGET_IMMUNE;"When the character attacks
+And the target is immune to its attacks";2
+68;-1;INVENTORY_FULL;"When the character's backpack is full
+And the player still tries 
+To select an item 
+Into the character’s inventory";3
+69;-1;PICKED_POCKET;"If the character steals successfully
+From another creature";4
+70;-1;HIDDEN_IN_SHADOWS;If the character hides successfully;5
+71;-1;SPELL_DISRUPTED;"When the character is disturbed
+at spell casting,
+e.g. by an enemy attack or a
+Disruptive state";6
+72;-1;SET_A_TRAP;If the character sets a trap successfully;7
+73;-1;;;
+74;-1;;;
+75;-1;;;
+76;-1;;;
+77;-1;;;
+78;-1;;;
+79;-1;BGEE_ACTION4;"After selecting the character, 
+Move it to another position";s
+80;-1;BGEE_ACTION5;"After selecting the character, 
+Move it to another position";t
+81;-1;BGEE_ACTION6;"After selecting the character, 
+Move it to another position";u
+82;-1;BGEE_ACTION7;"After selecting the character, 
+Move it to another position";v
+83;-1;;;
+84;-1;;;
+85;-1;;;
+86;-1;;;
+87;-1;;;
+88;-1;;;
+89;-1;;;
+90;-1;;;
+91;-1;;;
+92;-1;;;
+93;-1;;;
+94;-1;;;
+95;-1;;;
+96;-1;;;
+97;-1;;;
+98;-1;;;
+99;-1;;;
