@@ -1,0 +1,73 @@
+BACKUP ~./backup~
+AUTHOR ~Incrementis (incrementis@gmail.com)~
+VERSION ~v0.0.0~
+AUTO_EVAL_STRINGS// This will prevent the need of EVAL for string variables
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/dynArrayFunctionalities.tph~
+	
+	// CREATING ITEM FILE(for testing patch version)
+	// ----------------------------------------------
+	CREATE ~ITM~ ~Testfile~	// "Weave to Dust"
+	
+END// End of "ALWAYS"
+
+
+BEGIN ~Pseudo-Dynamic-Array-Benchmark~
+
+// INIT VARIABLES
+// --------------
+OUTER_SET numberOfElements = 1000
+OUTER_SPRINT arrayName ~PDA~
+
+// CREATE ARRAY
+// ------------
+ACTION_TIME ~Pseudo-Dynamic-Array-Benchmark~ 
+BEGIN
+	OUTER_SET 		~!_slotNumbers~ 	= ~%numberOfElements%~
+	OUTER_SPRINT 	~!_setArrayName~	~%arrayName%~
+	LAM DYN_ARRAY_CREATE
+END
+
+
+// PATCHING ITEM TESTFILE
+// ----------------------
+COPY_EXISTING ~Testfile.ITM~ ~%MOD_FOLDER%~
+// SET ARRAY VALUES
+// ----------------
+FOR(index = 0; index < numberOfElements; ++index)
+BEGIN
+	SET 	~!_position~ =		index
+	SET 	~!_maxSlots~ =		numberOfElements
+	SET		~!_collected~=		0
+	SPRINT 	~!_useArrayName~ 	~%arrayName%~
+	SPRINT 	~!_arrayValue~		~!_NULL~
+	LPM DYN_ARRAY_SET_VALUES
+	
+	// All values collected
+	PATCH_IF(index = (numberOfElements - 1)) THEN
+	BEGIN
+		SET 	~!_position~ =		index
+		SET 	~!_maxSlots~ =		numberOfElements
+		SET		~!_collected~=		1
+		SPRINT 	~!_useArrayName~ 	~%arrayName%~
+		SPRINT 	~!_arrayValue~		~!_NULL~
+		LPM DYN_ARRAY_SET_VALUES
+	END
+END
+
+/*
+// PRINT ARRAY VLAUES
+// ------------------
+FOR(index = 0; index < numberOfElements; ++index) 
+BEGIN
+		
+	TEXT_SPRINT test0 $~%arrayName%~(~%index%~)
+	PATCH_PRINT ~Position: %index% Value: %test0%~
+END
+*/

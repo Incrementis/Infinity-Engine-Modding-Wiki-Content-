@@ -1,0 +1,101 @@
+WeiDU v 24900 Log
+
+ G:\GOG\Baldur's Gate - Enhanced Edition\setup-arraytest.exe
+[.\chitin.key] loaded, 781382 bytes
+[.\chitin.key] 121 BIFFs, 55555 resources
+[./goglog.ini] loaded, 91 bytes
+[./unins000.ini] loaded, 41 bytes
+[./unins001.ini] loaded, 41 bytes
+[./unins002.ini] loaded, 41 bytes
+[.\engine.lua] loaded, 101 bytes
+[.\weidu.conf] loaded, 17 bytes
+[.\lang\en_us\dialog.tlk] loaded, 8696402 bytes
+[.\lang\en_us\dialog.tlk] 71421 string entries
+
+Using .\lang\en_us\dialog.tlk
+
+Install Component [Pseudo-Dynamic-Array-Benchmark]?
+[I]nstall, or [N]ot Install or [Q]uit? 
+Installing [Pseudo-Dynamic-Array-Benchmark] [v0.0.0]
+
+Creating file Testfile.itm; 114 bytes
+Copying and patching 1 file ...
+Copied [.../fl-inlined/tmp] to [override/Testfile.itm]
+Copying 1 file ...
+Copied [./weidu_external/temp/!_temporaryArrayBuffer.tph] to [./weidu_external/temp/arrays/values/!_PDABuffer.tph]
+Copying 1 file ...
+Copied [./weidu_external/temp/!_temporaryPatchArrayBuffer.tph] to [./weidu_external/temp/arrays/values/!_patchPDABuffer.tph]
+Copying and patching 1 file ...
+Copied [./weidu_external/temp/!_temporaryArray.tpa] to [./weidu_external/temp/arrays/!_PDA.tpa]
+Copying and patching 1 file ...
+Copied [./weidu_external/temp/!_temporaryPatchArray.tpa] to [./weidu_external/temp/arrays/!_patchPDA.tpa]
+Appending to files ...
+[./weidu_external/temp/arrays/!_PDA.tpa] loaded, 70 bytes
+Appended text to [./weidu_external/temp/arrays/!_PDA.tpa]
+Appending to files ...
+[./weidu_external/temp/arrays/!_patchPDA.tpa] loaded, 68 bytes
+Appended text to [./weidu_external/temp/arrays/!_patchPDA.tpa]
+Appending to files ...
+[./weidu_external/temp/arrays/!_PDA.tpa] loaded, 26966 bytes
+Appended text to [./weidu_external/temp/arrays/!_PDA.tpa]
+Appending to files ...
+[./weidu_external/temp/arrays/!_patchPDA.tpa] loaded, 26964 bytes
+Appended text to [./weidu_external/temp/arrays/!_patchPDA.tpa]
+Copying and patching 1 file ...
+[./override/Testfile.ITM] loaded, 114 bytes
+Appending to files ...
+[./weidu_external/temp/arrays/values/!_patchPDABuffer.tph] loaded, 1 bytes
+Appended text to [./weidu_external/temp/arrays/values/!_patchPDABuffer.tph]
+Copied [Testfile.ITM] to [ARRAYTEST/Testfile.ITM]
+
+
+Saving This Log:
+ARRAYTEST/ARRAYTEST.TP2  0  0 Installed ~Pseudo-Dynamic-Array-Benchmark~
+
+SUCCESSFULLY INSTALLED      Pseudo-Dynamic-Array-Benchmark
+
+		Mod Timings
+Pseudo-Dynamic-Array-Benchmark   0.016
+
+		WeiDU Timings
+unmarshal KEY                    0.000
+OUTER_INNER_PATCH_SAVE           0.000
+ACTION_TIME                      0.000
+<<<<<<<<                         0.000
+ACTION_MATCH                     0.000
+load TLK                         0.000
+DEFINE_PATCH_FUNCTION            0.000
+LAUNCH_ACTION_MACRO              0.000
+DEFINE_ACTION_FUNCTION           0.000
+OUTER_SET                        0.000
+INCLUDE                          0.000
+DEFINE_DIMORPHIC_FUNCTION        0.000
+BUT_ONLY                         0.000
+CREATE                           0.000
+REINCLUDE                        0.000
+parsing .log files               0.000
+Parsing TP2 files                0.000
+eval_pe                          0.000
+ACTION_TO_LOWER                  0.000
+function overhead                0.000
+OUTER_FOR                        0.000
+DEFINE_ACTION_MACRO              0.000
+ACTION_TO_UPPER                  0.000
+APPEND                           0.000
+OUTER_INNER_PATCH                0.000
+ACTION_IF                        0.000
+PRINT                            0.000
+Parsing TPP files                0.000
+Resolving LABELs                 0.000
+READ_*                           0.000
+loading files                    0.000
+Parsing TPA files                0.000
+LAUNCH_ACTION_FUNCTION           0.000
+saving files                     0.000
+DEFINE_PATCH_MACRO               0.000
+stuff not covered elsewhere      0.000
+COPY                             0.000
+unmarshal TLK                    0.000
+OUTER_SPRINT                     0.016
+process_patch2                   0.031
+TOTAL                            0.047

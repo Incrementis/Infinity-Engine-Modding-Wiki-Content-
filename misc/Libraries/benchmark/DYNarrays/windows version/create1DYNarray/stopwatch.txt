@@ -1,0 +1,15 @@
+1k:	 0.00 sec	
+2k:	 0.22 sec	
+3k:	 0.35 sec	
+10k: 1.26 sec	
+20k: 4.02 sec	
+30k: 8.53 sec	
+40k: 15.28 sec	
+50k: 22.43 sec	
+60k: 34.59 sec	
+70k: 45.69 sec
+
+Naive prediction for 140k: 
+1 min 32 sec
+
+140k: 2 min 40 sec 

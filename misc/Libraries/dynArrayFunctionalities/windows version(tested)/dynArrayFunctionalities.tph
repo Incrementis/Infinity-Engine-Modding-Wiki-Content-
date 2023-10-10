@@ -1,0 +1,397 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+//-----------------------------------------------------------//
+// Contains self defined pseudo dynamic array functionalities//
+//-----------------------------------------------------------//
+
+// GLOBAL LIB VARIABLES(Don't change these)
+// ----------------------------------------
+OUTER_SPRINT 	~!_bufferValue~ ~~
+OUTER_SPRINT 	~!_arraySlots~ 	~~
+
+
+
+// ---DEFAULT/INIT ARGUMENTS(Don't change these!)
+// USAGE: 	Copy these variables to another location and change their values before calling the macro.
+//			This macro can not be used in patching.
+OUTER_SET 		~!_slotNumbers~ 	= 0
+OUTER_SPRINT 	~!_setArrayName~	~!_NULL~
+// Purpose: Creates a dynamic array and patch dynamic array
+// ----------------------------------------------------------------------------------------------
+// Parameters:|
+// ============
+// 	!_slotNumbers 	->	The desired number of elements that the array can hold
+//	!_setArrayName 	-> 	The array name which is needed for further "DYN_ARRAY" function arguments
+// ----------------------------------------------------------------------------------------------
+DEFINE_ACTION_MACRO DYN_ARRAY_CREATE 
+BEGIN
+	// ALL VARIABLES IN THIS MACRO AND DEFAULT VALUES
+	// ----------------------------------------------
+	// INTEGER 			~!_slotNumbers~ 	= "-1"
+	// STRING 			~!_setArrayName~ 	~!_NULL~
+	// INTEGER			index				= 0
+	// STRING			~!_arraySlots~ 		~~
+	// ----------------------------------------------
+	
+	// Local variables which must not or can't be manipulated outside of macros
+	LOCAL_SET 		index 			= 0
+	OUTER_SPRINT 	~!_arraySlots~ 	~~
+	
+	// Checks if a proper array name is given	
+	ACTION_IF (~%!_setArrayName%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_ACTION_MACRO DYN_ARRAY_CREATE -> The correct array name as an argument is missing. The array name !_NULL is forbidden.~
+	END
+	// Checks if slot numbers are not out of bounds
+	ACTION_IF (~%!_slotNumbers%~ <= 0) THEN 
+	BEGIN
+		FAIL ~DEFINE_ACTION_MACRO DYN_ARRAY_CREATE %!_setArrayName% -> The correct SlotNumbers are missing as an argument. Value must be greater than 0!~
+	END
+
+	// Creates empty inline files which are needed 
+	// for buffering current values regarding dyn arrays and patch dyn arrays
+	<<<<<<<<./weidu_external/workspace/!_temporaryArrayBuffer.tph
+	>>>>>>>> 
+	<<<<<<<<./weidu_external/workspace/!_temporaryPatchArrayBuffer.tph
+	>>>>>>>>
+	COPY ~./weidu_external/workspace/!_temporaryArrayBuffer.tph~ ~./weidu_external/%MOD_FOLDER%/temp/arrays/values/!_%!_setArrayName%Buffer.tph~
+	COPY ~./weidu_external/workspace/!_temporaryPatchArrayBuffer.tph~ ~./weidu_external/%MOD_FOLDER%/temp/arrays/values/!_patch%!_setArrayName%Buffer.tph~
+
+	// Creates an inline file which content is needed to define the dynamic array. 
+	<<<<<<<<./weidu_external/workspace/!_temporaryArray.tph
+	DEFINE_ACTION_MACRO ~!_%!_setArrayName%~ 
+	BEGIN
+	ACTION_DEFINE_ARRAY ~%!_setArrayName%~ BEGIN >>>>>>>>
+	
+	// Creates an inline file which content is needed to define the dynamic patch array. 
+	<<<<<<<<./weidu_external/workspace/!_temporaryPatchArray.tph
+	DEFINE_PATCH_MACRO ~!_%!_setArrayName%~ 
+	BEGIN
+	PATCH_DEFINE_ARRAY ~%!_setArrayName%~ BEGIN >>>>>>>>
+	
+	// Copies the content of the temporary arrays to dynamic named files so that they can be reused for another array
+	COPY ~./weidu_external/workspace/!_temporaryArray.tph~ ~./weidu_external/%MOD_FOLDER%/temp/arrays/!_%!_setArrayName%.tph~  EVALUATE_BUFFER
+	COPY ~./weidu_external/workspace/!_temporaryPatchArray.tph~ ~./weidu_external/%MOD_FOLDER%/temp/arrays/!_patch%!_setArrayName%.tph~  EVALUATE_BUFFER
+	
+	
+	// Includes array element slots as variables into the array (%LNL% means Linux New Line)
+	OUTER_FOR(index = 0; index < ~!_slotNumbers~; ++index) BEGIN	
+		OUTER_SPRINT ~!_arraySlots~ ~%!_arraySlots%	"%%!_setArrayName%%index%%"%LNL%~	
+	END
+	APPEND_OUTER ~./weidu_external/%MOD_FOLDER%/temp/arrays/!_%!_setArrayName%.tph~ ~%!_arraySlots%~
+	APPEND_OUTER ~./weidu_external/%MOD_FOLDER%/temp/arrays/!_patch%!_setArrayName%.tph~ ~%!_arraySlots%~
+	
+	// Closes dynamic array and makes it usable by WeiDU with 
+	// e.g. INCLUDE/REINCLUDE (The tab space is for formatting)
+	APPEND_OUTER 	~./weidu_external/%MOD_FOLDER%/temp/arrays/!_%!_setArrayName%.tph~ ~	END END~	
+	APPEND_OUTER 	~./weidu_external/%MOD_FOLDER%/temp/arrays/!_patch%!_setArrayName%.tph~ ~	END END~	
+	REINCLUDE 		~./weidu_external/%MOD_FOLDER%/temp/arrays/!_%!_setArrayName%.tph~
+	REINCLUDE 		~./weidu_external/%MOD_FOLDER%/temp/arrays/!_patch%!_setArrayName%.tph~
+	
+	// Resets macro variables
+	OUTER_SET 		~!_slotNumbers~ 	= 0
+	OUTER_SPRINT 	~!_setArrayName~	~!_NULL~
+
+END// End of "DYN_ARRAY_CREATE"
+
+
+
+// Purpose: Reads the buffer file for the specified array into a file.
+//			This function mustn't be used outside this library.
+// ----------------------------------------------------------------------------------------------
+// Parameters:|
+// ============
+// position 	->	The array slot position/index in which the new value will be written
+// UseArrayName ->	The required name of the array in which the new values will be written.
+// bufferValue	->	The required string containing the buffered values
+DEFINE_DIMORPHIC_FUNCTION DYN_ARRAY_BUFFER_TO_FILE
+	INT_VAR
+		position 	= "-1"
+	STR_VAR
+		UseArrayName= ~!_NULL~
+		bufferValue = ~~
+		functionType= ~!_NULL~
+BEGIN
+	ACTION_IF (~%functionType%~ STRING_EQUAL ~PATCH~) THEN
+	BEGIN
+		// This little line does not work inside of a patch macros, 
+		// thus it is wrapped in this dimorphic function
+		APPEND_OUTER ~./weidu_external/%MOD_FOLDER%/temp/arrays/values/!_patch%UseArrayName%Buffer.tph~ ~%bufferValue%~
+	END ELSE ACTION_IF (~%functionType%~ STRING_EQUAL ~OUTER~) THEN
+	BEGIN
+	
+		APPEND_OUTER ~./weidu_external/%MOD_FOLDER%/temp/arrays/values/!_%UseArrayName%Buffer.tph~ ~%bufferValue%~
+	END ELSE
+	BEGIN
+	
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION DYN_ARRAY_BUFFER_TO_FILE %UseArrayName% -> The function type argument is missing or invalid. The allowed function types are PATCH and OUTER.~	
+	END
+		
+END// End of "DYN_ARRAY_BUFFER_TO_FILE"
+
+
+
+// ---DEFAULT/INIT ARGUMENTS(Don't change these!)
+// USAGE: 	Copy the these variables to another location and change their values before calling the macro.
+//			It is important to note that this macro has a patch version.
+OUTER_SET 		~!_position~ =		"-1"
+OUTER_SET 		~!_maxSlots~ =		"-1"
+OUTER_SET		~!_collected~=		"-1"
+OUTER_SPRINT 	~!_useArrayName~ 	~!_NULL~
+OUTER_SPRINT 	~!_arrayValue~		~!_NULL~
+// Purpose: Replaces/sets values in a dynamic array
+// ------------------------------------------------
+// Parameters:|
+// ============
+// !_position		-> 	The array slot position/index in which the new value will be written
+// !_maxSlots		->	The highest value the argument for position/index is allowed to be.
+//					The maximum is in general the max number of elments the array can contain
+// !_collected		->	A flag that indicates whether or not the collection process is complete.
+//						0: Collection is complete.
+//						1: Collection is in progress.
+// !_useArrayName	->	The array name in which the array value is written
+// !_arrayValue		->	The value that is planned to be written to the array.
+DEFINE_ACTION_MACRO DYN_ARRAY_SET_VALUES
+BEGIN
+	// ALL VARIABLES IN THIS MACRO AND DEFAULT VALUES
+	// ----------------------------------------------
+	// INTEGER 			~!_position~ =		"-1"
+	// INTEGER 			~!_maxSlots~ =		"-1"
+	// INTEGER			~!_collected~=		"-1"
+ 	// STRING 			~!_useArrayName~ 	~!_NULL~
+ 	// INTEGER/STRING 	~!_arrayValue~		~!_NULL~
+	// STRING			~!_bufferValue~		~~
+	// ----------------------------------------------
+	
+	// Corrects number of elements to slot index
+	OUTER_SET ~!_maxSlots~ = ~%!_maxSlots%~ - 1
+		
+	// Checks if an array index is not given
+	ACTION_IF (~%!_position%~ <= "-1") THEN 
+	BEGIN
+		FAIL ~DEFINE_ACTION_MACRO DYN_ARRAY_SET_VALUES %!_useArrayName% -> The correct position as an argument is missing. The position value must be greater than -1!~
+	END
+	// Checks if a highest array slot number is not given or if it makes any sense
+	ACTION_IF ( (~%!_maxSlots%~ <= "-1") OR (~%!_maxSlots%~ < ~%!_position%~) ) THEN 
+	BEGIN
+		// Prepares value for error output
+		OUTER_SET ~!_maxSlots~ = ~%!_maxSlots%~ + 1 
+		FAIL ~DEFINE_ACTION_MACRO DYN_ARRAY_SET_VALUES %!_useArrayName% -> The correct maxSlots as an argument is missing. The maxSlots value is %!_maxSlots%, but must be greater than -1 and greater %!_position%!~
+	END
+	// Checks if an array name is not given
+	ACTION_IF (~%!_useArrayName%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_ACTION_MACRO DYN_ARRAY_SET_VALUES -> The correct array name as an argument is missing. The array name !_NULL is forbidden.~
+	END
+	// Checks if an array index is not given
+	ACTION_IF (~%!_collected%~ <= "-1" OR ~%!_collected%~ >= 2) THEN 
+	BEGIN
+		FAIL ~DEFINE_ACTION_MACRO DYN_ARRAY_SET_VALUES %!_useArrayName% -> The argument for "!_collected" is %!_collected%. Allowed values are 0(for still collecting) and 1(value collection is done) !~
+	END
+	
+	// Checks if the array value is an integer and calls the appropriate function
+	// to prepare the abstract array element information.
+	ACTION_IF (IS_AN_INT ~%!_arrayValue%~) THEN 
+	BEGIN	
+		OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%LNL%~~~~~		
+	// If value is not integer then it is string
+	END ELSE 
+	BEGIN		
+		OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SPRINT ~%!_useArrayName%%!_position%~ ~%!_arrayValue%~%LNL%~~~~~
+	END
+	
+	// If all values are collected then write it into array
+	ACTION_IF (~%!_collected%~ = 1) THEN
+	BEGIN
+		
+		LAF DYN_ARRAY_BUFFER_TO_FILE
+			INT_VAR
+				position 	= ~%!_position%~
+			STR_VAR
+				UseArrayName= EVAL~%!_useArrayName%~
+				bufferValue = EVAL~%!_bufferValue%~
+				functionType= EVAL~OUTER~
+		END
+		
+		// Writes into the dynamic array
+		REINCLUDE ~./weidu_external/%MOD_FOLDER%/temp/arrays/values/!_%!_useArrayName%Buffer.tph~
+		LAM ~!_%!_useArrayName%~
+		
+		// Resets global lib variable
+		OUTER_SPRINT ~!_bufferValue~ ~~	
+		// Resets macro variables
+		OUTER_SET 		~!_position~ =		"-1"
+		OUTER_SET 		~!_maxSlots~ =		"-1"
+		OUTER_SET		~!_collected~=		"-1"
+		OUTER_SPRINT 	~!_useArrayName~ 	~!_NULL~
+		OUTER_SPRINT 	~!_arrayValue~		~!_NULL~
+	END
+	
+END// End of "DYN_ARRAY_SET_VALUES"
+
+
+
+// ---DEFAULT/INIT ARGUMENTS(Don't change these!)
+// USAGE: 	Copy the commented SET variables to another location and change their values before calling the macro.
+//			It is important to note that this macro has a outer version.
+//SET 		~!_position~ =		"-1"
+//SET 		~!_maxSlots~ =		"-1"
+//SET		~!_collected~=		"-1"
+//SPRINT 	~!_useArrayName~ 	~!_NULL~
+//SPRINT 	~!_arrayValue~		~!_NULL~
+// Purpose: Replaces/sets patch values in a dynamic array
+// ------------------------------------------------------
+// Parameters:|
+// ============
+// !_position		-> 	The array slot position/index in which the new value will be written
+// !_maxSlots		->	The highest value the argument for position/index is allowed to be.
+//					The maximum is in general the max number of elments the array can contain
+// !_collected		->	A flag that indicates whether or not the collection process is complete.
+//						0: Collection is complete.
+//						1: Collection is in progress.
+// !_useArrayName	->	The array name in which the array value is written
+// !_arrayValue		->	The value that is planned to be written to the array.
+DEFINE_PATCH_MACRO DYN_ARRAY_SET_VALUES
+BEGIN
+	// ALL VARIABLES IN THIS MACRO AND DEFAULT VALUES
+	// ----------------------------------------------
+	// INTEGER 			~!_position~ =		"-1"
+	// INTEGER 			~!_maxSlots~ =		"-1"
+	// INTEGER			~!_collected~=		"-1"
+ 	// STRING 			~!_useArrayName~ 	~!_NULL~
+ 	// INTEGER/STRING 	~!_arrayValue~		~!_NULL~
+	// STRING			~!_bufferValue~		~~
+	// ----------------------------------------------
+	
+	// Corrects number of elements to slot index
+	SET ~!_maxSlots~ = ~!_maxSlots~ - 1
+		
+	// Checks if an array index is not given
+	PATCH_IF (~%!_position%~ <= "-1") THEN 
+	BEGIN
+		PATCH_FAIL ~DEFINE_PATCH_MACRO DYN_ARRAY_SET_VALUES %!_useArrayName% -> The correct position as an argument is missing. The position value must be greater than -1!~
+	END
+	// Checks if a highest array slot number is not given or if it makes any sense
+	PATCH_IF ( (~%!_maxSlots%~ <= "-1") OR (~%!_maxSlots%~ < ~%!_position%~) ) THEN 
+	BEGIN
+		// Prepares value for error output
+		SET ~!_maxSlots~ = ~!_maxSlots~ + 1 
+		PATCH_FAIL ~DEFINE_PATCH_MACRO DYN_ARRAY_SET_VALUES %!_useArrayName% -> The correct maxSlots as an argument is missing. The maxSlots value is %!_maxSlots%, but must be greater than -1 and greater %!_position%!~
+	END
+	// Checks if an array name is not given
+	PATCH_IF (~%!_useArrayName%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		PATCH_FAIL ~DEFINE_PATCH_MACRO DYN_ARRAY_SET_VALUES -> The correct array name as an argument is missing. The array name !_NULL is forbidden.~
+	END
+	// Checks if an array index is not given
+	PATCH_IF (~%!_collected%~ <= "-1" OR ~%!_collected%~ >= 2) THEN 
+	BEGIN
+		PATCH_FAIL ~DEFINE_PATCH_MACRO DYN_ARRAY_SET_VALUES %!_useArrayName% -> The argument for "!_collected" is %!_collected%. Allowed values are 0(for still collecting) and 1(value collection is done) !~
+	END
+	
+	// Checks if the array value is an integer and calls the appropriate function
+	// to prepare the abstract array element information.
+	PATCH_IF (IS_AN_INT ~%!_arrayValue%~) THEN 
+	BEGIN	
+		SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%LNL%~~~~~		
+	// If value is not integer then it is string
+	END ELSE 
+	BEGIN	
+		SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SPRINT ~%!_useArrayName%%!_position%~ ~%!_arrayValue%~%LNL%~~~~~
+	END
+	
+	// If all values are collected then write it into array
+	PATCH_IF (~%!_collected%~ = 1) THEN
+	BEGIN
+	
+		LPF DYN_ARRAY_BUFFER_TO_FILE
+			INT_VAR
+				position 	= ~%!_position%~
+			STR_VAR
+				UseArrayName= EVAL~%!_useArrayName%~
+				bufferValue = EVAL~%!_bufferValue%~
+				functionType= EVAL~PATCH~
+		END
+		
+		// Writes into the dynamic array
+		PATCH_REINCLUDE ~./weidu_external/%MOD_FOLDER%/temp/arrays/values/!_patch%!_useArrayName%Buffer.tph~
+		LPM ~!_%!_useArrayName%~
+		
+		// Resets global lib variable
+		SPRINT ~!_bufferValue~ ~~	
+		// Resets macro variables
+		SET 	~!_position~ =		"-1"
+		SET 	~!_maxSlots~ =		"-1"
+		SET		~!_collected~=		"-1"
+		SPRINT 	~!_useArrayName~ 	~!_NULL~
+		SPRINT 	~!_arrayValue~		~!_NULL~
+	END
+	
+END// End of "DYN_ARRAY_SET_VALUES"
+
+
+
+// ---DEFAULT/INIT ARGUMENTS(Don't change these!)
+// USAGE: 	Copy the variable 1 to 1 to somewhere else where you need it 
+// 			and change its value before before calling the macro.!!!
+//			This macro can not be used in patching.
+OUTER_SPRINT ~!_deleteArray~ ~!_NULL~
+// Purpose: Deletes all created dynamic array files for patch and outer version
+// ----------------------------------------------------------------------------
+// Parameters:|
+// ============
+// !_deleteArray -> The array name for which the files will be deleted
+// -------------------------------------------------------------------
+DEFINE_ACTION_MACRO DYN_ARRAY_CLEANUP		
+BEGIN
+	// ALL VARIABLES IN THIS MACRO AND DEFAULT VALUES
+	// ----------------------------------------------
+ 	// STRING 			~!_deleteArray~ 	~!_NULL~
+	// ----------------------------------------------
+	
+	// ---WARNING: Will output an error if local variables are not placed directly at the beginning of macros
+	LOCAL_SPRINT outerBufferFilename 	~./weidu_external/%MOD_FOLDER%/temp/arrays/values/!_%!_deleteArray%Buffer.tph~
+	LOCAL_SPRINT patchBufferFilename 	~./weidu_external/%MOD_FOLDER%/temp/arrays/values/!_patch%!_deleteArray%Buffer.tph~
+	LOCAL_SPRINT outerArrayFilename 	~./weidu_external/%MOD_FOLDER%/temp/arrays/!_%!_deleteArray%.tph~
+	LOCAL_SPRINT patchArrayFilename 	~./weidu_external/%MOD_FOLDER%/temp/arrays/!_patch%!_deleteArray%.tph~
+
+	// The macro fails if no array name is given because it needs to know which array to delete the files for.
+	ACTION_IF (~%!_deleteArray%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_ACTION_MACRO DYN_ARRAY_CLEAR_BUFFER -> The correct array name as an argument is missing. The array name !_NULL is forbidden.~
+	END
+		
+	// Deletes the buffer files for the specified array.
+	ACTION_IF(FILE_EXISTS ~%outerBufferFilename%~) THEN
+	BEGIN
+		DELETE ~%outerBufferFilename%~
+		PRINT ~Deleted %outerBufferFilename% belonging to %!_deleteArray% dynamic array~
+	END ELSE BEGIN
+		WARN ~DEFINE_ACTION_MACRO DYN_ARRAY_CLEANUP -> Couldn't find and delete %outerBufferFilename%!~
+	END
+	
+	ACTION_IF(FILE_EXISTS ~%patchBufferFilename%~) THEN
+	BEGIN
+		DELETE ~%patchBufferFilename%~
+		PRINT ~Deleted %patchBufferFilename% belonging to %!_deleteArray% dynamic array~
+	END ELSE BEGIN
+		WARN ~DEFINE_ACTION_MACRO DYN_ARRAY_CLEANUP -> Couldn't find and delete %patchBufferFilename%!~
+	END
+	
+	// Deletes the definition files for the specified array.
+	ACTION_IF(FILE_EXISTS ~%outerArrayFilename%~) THEN
+	BEGIN
+		DELETE ~%outerArrayFilename%~
+		PRINT ~Deleted %outerArrayFilename% belonging to %!_deleteArray% dynamic array~
+	END ELSE BEGIN
+		WARN ~DEFINE_ACTION_MACRO DYN_ARRAY_CLEANUP -> Couldn't find and delete %outerArrayFilename%!~
+	END
+
+	ACTION_IF(FILE_EXISTS ~%patchArrayFilename%~) THEN
+	BEGIN
+		DELETE ~%patchArrayFilename%~
+		PRINT ~Deleted %patchArrayFilename% belonging to %!_deleteArray% dynamic array~
+	END ELSE BEGIN
+		WARN ~DEFINE_ACTION_MACRO DYN_ARRAY_CLEANUP -> Couldn't find and delete %patchArrayFilename%!~
+	END
+
+END// End of "DYN_ARRAY_CLEANUP"

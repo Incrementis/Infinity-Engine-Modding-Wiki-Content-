@@ -1,0 +1,17 @@
+1k:	5.64 sec	
+2k:	11.30 sec	
+3k:	16.85 sec	
+4k:	22.74 sec	
+5k:	29.94 sec	
+6k:	36.42 sec	
+7k:	43.30 sec	
+8k:	52.25 sec	
+9k:	58.36 sec	
+10k: 1 min 8.07 sec
+
+Average: 334.87/10 = 33.487
+
+Naive prediction for 20k: 
+2 min 16.14 sec  
+
+20k: 3 min 12.32 sec 

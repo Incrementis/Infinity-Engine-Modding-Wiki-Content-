@@ -1,0 +1,27 @@
+BACKUP ~./backup~
+AUTHOR ~Incrementis (incrementis@gmail.com)~
+VERSION ~v0.0.0~
+AUTO_EVAL_STRINGS// This will prevent the need of EVAL for string variables
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't touch these)
+	// -----------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/dynArrayFunctionalities.tph~
+	
+END// End of "ALWAYS"
+
+
+BEGIN ~Pseudo-Dynamic-Array-Benchmark~
+
+OUTER_SET numberOfElements = 1000
+OUTER_SPRINT arrayName ~PDA~
+
+ACTION_TIME ~Pseudo-Dynamic-Array-Benchmark~ 
+BEGIN
+	OUTER_SET 		~!_slotNumbers~ 	= ~%numberOfElements%~
+	OUTER_SPRINT 	~!_setArrayName~	~%arrayName%~
+	LAM DYN_ARRAY_CREATE
+END

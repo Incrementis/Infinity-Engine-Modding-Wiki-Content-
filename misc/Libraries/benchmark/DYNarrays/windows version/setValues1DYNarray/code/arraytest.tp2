@@ -1,0 +1,66 @@
+BACKUP ~./backup~
+AUTHOR ~Incrementis (incrementis@gmail.com)~
+VERSION ~v0.0.0~
+AUTO_EVAL_STRINGS// This will prevent the need of EVAL for string variables
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/dynArrayFunctionalities.tph~
+	
+END// End of "ALWAYS"
+
+
+BEGIN ~Pseudo-Dynamic-Array-Benchmark~
+
+// INIT VARIABLES
+// --------------
+OUTER_SET numberOfElements = 1000
+OUTER_SPRINT arrayName ~PDA~
+
+// CREATE ARRAY
+// ------------
+ACTION_TIME ~Pseudo-Dynamic-Array-Benchmark~ 
+BEGIN
+	OUTER_SET 		~!_slotNumbers~ 	= ~%numberOfElements%~
+	OUTER_SPRINT 	~!_setArrayName~	~%arrayName%~
+	LAM DYN_ARRAY_CREATE
+END
+
+// SET ARRAY VALUES
+// ----------------
+OUTER_FOR(index = 0; index < numberOfElements; ++index)
+BEGIN
+	OUTER_SET 		~!_position~ =		index
+	OUTER_SET 		~!_maxSlots~ =		numberOfElements
+	OUTER_SET		~!_collected~=		0
+	OUTER_SPRINT 	~!_useArrayName~ 	~%arrayName%~
+	OUTER_SPRINT 	~!_arrayValue~		~!_NULL~
+	LAM DYN_ARRAY_SET_VALUES
+	
+	// All values collected
+	ACTION_IF(index = (numberOfElements - 1)) THEN
+	BEGIN
+		OUTER_SET 		~!_position~ =		index
+		OUTER_SET 		~!_maxSlots~ =		numberOfElements
+		OUTER_SET		~!_collected~=		1
+		OUTER_SPRINT 	~!_useArrayName~ 	~%arrayName%~
+		OUTER_SPRINT 	~!_arrayValue~		~!_NULL~
+		LAM DYN_ARRAY_SET_VALUES
+	END
+END
+
+
+/*
+// PRINT ARRAY VLAUES
+// ------------------
+OUTER_FOR(index = 0; index < numberOfElements; ++index) 
+BEGIN
+		
+	OUTER_TEXT_SPRINT 	test0 $~%arrayName%~(~%index%~)
+	PRINT ~Position: %index% Value: %test0%~
+END
+*/
