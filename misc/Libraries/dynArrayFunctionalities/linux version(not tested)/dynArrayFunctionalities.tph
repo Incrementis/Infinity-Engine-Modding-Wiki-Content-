@@ -146,8 +146,8 @@ OUTER_SPRINT 	~!_arrayValue~		~!_NULL~
 // !_maxSlots		->	The highest value the argument for position/index is allowed to be.
 //					The maximum is in general the max number of elments the array can contain
 // !_collected		->	A flag that indicates whether or not the collection process is complete.
-//						0: Collection is complete.
-//						1: Collection is in progress.
+//						0: Collection is in progress.
+//						1: Collection is complete.
 // !_useArrayName	->	The array name in which the array value is written
 // !_arrayValue		->	The value that is planned to be written to the array.
 DEFINE_ACTION_MACRO DYN_ARRAY_SET_VALUES
@@ -246,8 +246,8 @@ END// End of "DYN_ARRAY_SET_VALUES"
 // !_maxSlots		->	The highest value the argument for position/index is allowed to be.
 //					The maximum is in general the max number of elments the array can contain
 // !_collected		->	A flag that indicates whether or not the collection process is complete.
-//						0: Collection is complete.
-//						1: Collection is in progress.
+//						0: Collection is in progress.
+//						1: Collection is complete.
 // !_useArrayName	->	The array name in which the array value is written
 // !_arrayValue		->	The value that is planned to be written to the array.
 DEFINE_PATCH_MACRO DYN_ARRAY_SET_VALUES
