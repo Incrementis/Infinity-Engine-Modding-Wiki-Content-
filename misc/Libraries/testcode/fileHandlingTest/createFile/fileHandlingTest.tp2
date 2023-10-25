@@ -1,0 +1,42 @@
+BACKUP ~./weidu_external/fileHandlingTest/backup~
+AUTHOR ~YOUR NAME~
+VERSION ~v0.0.0~
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/fileHandling.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN ~Create-File-Testing~
+
+// This will create a file without an extension in the game folder.
+OUTER_SPRINT 	~!_filename~ ~1~
+LAM CREATE_FILE
+// This will append content to the file
+APPEND_OUTER ~./1~ ~~~~~PRINT ~HELLO WOLRD!~ ~~~~~	
+// Includes file, so "HELLO WORLD" can be printed.
+INCLUDE ~./1~
+
+
+// This will create a file with an extension in a specific folder/path.
+OUTER_SPRINT 	~!_filename~ ~weidu_external/%MOD_FOLDER%/1.tph~
+LAM CREATE_FILE
+// This will append content to the file
+OUTER_SPRINT text ~HELLO WORLD!~
+APPEND_OUTER ~./weidu_external/%MOD_FOLDER%/1.tph~ ~~~~~PRINT ~%text%~ ~~~~~	
+// Includes file, so "HELLO WORLD" can be printed.
+INCLUDE ~./weidu_external/%MOD_FOLDER%/1.tph~
+
+
+// This will create a file without an extension in the game folder.
+OUTER_SET 	~!_filename~ = 2
+LAM CREATE_FILE

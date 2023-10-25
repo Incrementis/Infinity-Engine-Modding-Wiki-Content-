@@ -1,0 +1,35 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+//--------------------------------------//
+// Contains self defined file operations//
+//--------------------------------------//
+
+
+// ---DEFAULT/INIT ARGUMENTS(Don't change this!)
+// USAGE: 	Copy the variable 1 to 1 to somewhere else where you need it 
+// 			and change its value before before calling the macro.
+//			This macro can not be used in patching.
+OUTER_SPRINT 	~!_filename~ ~!_NULL~
+// Purpose: Creates a file on a defined location(NOTE: default location is the gamefolder)
+// --------------------------------------------------------------------------------------
+// Parameters:|
+// ============
+// !_filename -> The name of the file or the path including the file(e.g. "weidu_external/workspace/filename.tph")
+DEFINE_ACTION_MACRO CREATE_FILE
+BEGIN
+	// ALL VARIABLES IN THIS MACRO AND DEFAULT VALUES
+	// ----------------------------------------------
+	// STRING ~!_filename~ 	~!_NULL~
+	// ----------------------------------------------
+
+	// Checks if a proper file name is given
+	ACTION_IF(~%!_filename%~ STRING_EQUAL ~!_NULL~) THEN
+	BEGIN
+		FAIL ~DEFINE_ACTION_MACRO CREATE_FILE -> The correct argument for filename is missing. The argument !_NULL is forbidden.~
+	END
+
+	// Defines file inline then creates and copies file to location
+	<<<<<<<<./weidu_external/workspace/!_temporaryFile.tph
+	>>>>>>>>
+	COPY ~./weidu_external/workspace/!_temporaryFile.tph~ ~./%!_filename%~
+	
+END// End of "CREATE_FILE"
