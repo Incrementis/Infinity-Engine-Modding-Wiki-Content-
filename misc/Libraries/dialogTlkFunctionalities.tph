@@ -1,0 +1,71 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+//-------------------------------------------------//
+// Contains self defined dialog.tlk functionalities//
+//-------------------------------------------------//
+
+
+
+// Purpose: like RESOLVE_STR_REF, but takes only string values to resolve text 
+// 			and soundfile names.
+// ---------------------------------------------------------------------------
+// Parameters:|
+// ============
+// text 	-> The Text found in dialog.tlk
+// sound	-> The name of the soundfile without ".wav" found in the dialog.tlk 
+// strRef	-> The string reference number which is found
+DEFINE_DIMORPHIC_FUNCTION RESOLVE_STR_REF_WITH_STRINGS
+    STR_VAR
+        text 	= ~!_NULL~
+		sound	= ~!_NULL~
+	RET
+		strRef
+BEGIN
+	// Check if valid arguments are given.
+	ACTION_IF (~%text%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION RESOLVE_STR_REF_WITH_STRINGS -> The correct argument for text is missing. The argument !_NULL is forbidden.~
+	END
+	// Checks if a valid voxSound is given
+	ACTION_IF (~%sound%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION RESOLVE_STR_REF_WITH_STRINGS -> The correct argument for sound is missing. The argument !_NULL is forbidden.~
+	END
+	// Checks if sound name has more than 8 characters
+	ACTION_IF (STRING_LENGTH ~%sound%~ > 8) THEN
+	BEGIN
+		OUTER_SET numbers = STRING_LENGTH ~%sound%~
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION RESOLVE_STR_REF_WITH_STRINGS -> The argument '%sound%' for sound is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
+	END
+	
+	// Core part of this function. This part takes the string parameters  
+	// and uses them in the same way as RESOLVE_STR_REF.
+	<<<<<<<<./weidu_external/workspace/!_TemporaryResolveStrRef.tph
+	OUTER_SET strRef = RESOLVE_STR_REF(~%text%~ [%sound%])
+	>>>>>>>>
+	COPY ~./weidu_external/workspace/!_TemporaryResolveStrRef.tph~ ~./weidu_external/%MOD_FOLDER%/temp/values/!_TemporaryResolveStrRef.tph~ EVALUATE_BUFFER
+	REINCLUDE ~./weidu_external/%MOD_FOLDER%/temp/values/!_TemporaryResolveStrRef.tph~
+	
+END// End of "RESOLVE_STR_REF_WITH_STRINGS"
+
+
+
+// Purpose: Calculates the highest strref value in dialog.tlk
+//			by iteratively counting through the file.
+// -----------------------------------------------------------
+// Parameters:|
+// ============
+// strRef -> The highest strref value in dialog.tlk
+DEFINE_DIMORPHIC_FUNCTION HIGHEST_STR_REF_BY_COUNTING
+	RET
+		strRef
+BEGIN
+	OUTER_SET strRef = 0
+	// Loops over dialog.tlk
+	ALTER_TLK BEGIN	
+		SET strRef = strRef+1
+	END
+	// Subtracting 1 from strRef to account for the fact that the last iteration 
+	// of the loop increments strRef even though it is not a valid strref value.
+	OUTER_SET strRef = strRef - 1
+	
+END// End of "HIGHEST_STR_REF_BY_COUNTING"

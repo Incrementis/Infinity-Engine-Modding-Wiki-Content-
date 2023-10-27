@@ -1,0 +1,38 @@
+BACKUP ~./weidu_external/dialogTLKtest/backup~
+AUTHOR ~YOUR NAME~
+VERSION ~v0.0.0~
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/dialogTlkFunctionalities.tph~
+	
+	// CREATING ITEM FILE(for testing patch version)
+	// ----------------------------------------------
+	CREATE ~ITM~ ~Testfile~
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN ~TLK-Testing~
+
+// PATCHING ITEM TESTFILE
+// ----------------------
+COPY_EXISTING ~Testfile.ITM~ ~%MOD_FOLDER%~
+
+// This will add to a specific strref the text "Hello" 
+// and the sound file "World!.wav"
+LPF RESOLVE_STR_REF_WITH_STRINGS
+	STR_VAR
+		text = ~Hello~
+		sound = ~World!~
+	RET
+		refValue = strRef
+END
+
+PATCH_PRINT ~%refValue%~

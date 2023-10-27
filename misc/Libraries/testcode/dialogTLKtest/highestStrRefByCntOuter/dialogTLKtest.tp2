@@ -1,0 +1,41 @@
+BACKUP ~./weidu_external/dialogTLKtest/backup~
+AUTHOR ~YOUR NAME~
+VERSION ~v0.0.0~
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/dialogTlkFunctionalities.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN ~TLK-Testing~
+
+// -- Gets Highest stringref value(dialog.tlk)
+LAF HIGHEST_STR_REF_BY_COUNTING 
+	RET
+		max = strRef
+END
+// Prints maximum number of strrefs in dialog.tlk
+PRINT ~%max%~
+
+// Example
+OUTER_SET min 		= max - 1000
+OUTER_SET strref 	= min
+ALTER_TLK_RANGE min max BEGIN
+	// Gets sound and text from string reference
+	GET_STRREF 		strref 	refText
+	GET_STRREF_S 	strref	refSound
+	
+	// Print the text and mapped soundfile of the strref in dialog.tlk
+	PATCH_PRINT ~%strref%: %refText% [%refSound%]~
+	
+	SET strref = strref+1
+END
