@@ -1,13 +1,19 @@
 "Light Green: Default soundslots
 Dark green: Advanced soundslots
-Orange: BG2EE soundslots that work in BGEE";;;;
+Orange: BG2EE soundslots that work in BGEE
+Red: Does not trigger for custom player characters
+NOTE: You can also find all filled “SLOT_NAME” cells for some voices in the game’s CHARSND.2DA file (v2.6.6.0).";;;;
 POSITION;"     Example MALE/ DEFAULT     
 In Character Creation";SLOT-NAME;EVENT TRIGGER;POSTFIX
-1;-1;;;
-2;-1;;;
-3;-1;;;
-4;-1;;;
-5;-1;;;
+1;-1;MORALE;"Moral failure is triggered, e.g. because of
+low hit points";u_
+2;-1;HAPPY;Matches with the party's reputation;r_
+3;-1;UNHAPPY_ANNOYED;"„Slightly“ inconsistent 
+With the party's reputation";5_
+4;-1;UNHAPPY_SERIOUS;"„Strongly“ incompatible 
+with the party's reputation";6_
+5;-1;UNHAPPY_BREAKING_POINT;"Not at all compatible 
+With the party's reputation";j_
 6;16236;LEADER;"The specific character portrait is 
 Dragged and dropped to the very top";b
 7;16237;TIRED;"Character is tired
@@ -27,11 +33,16 @@ e.g. after a long journey without a break";c
 His hit points become zero";m
 20;16239;HURT;"Character is hit and
 His hit points become very low";e
-21;-1;;;
-22;-1;;;
-23;-1;;;
-24;-1;;;
-25;-1;;;
+21;-1;AREA_FOREST;"There's a chance the character will say it
+when he is in forest";n
+22;-1;AREA_CITY;"There's a chance the character will say it
+when he is in city";o
+23;-1;AREA_DUNGEON;"There's a chance the character will say it
+when he is in dungeon";p
+24;-1;AREA_DAY;"There's a chance the character will say it
+when it's day in the game";q
+25;-1;AREA_NIGHT;"There's a chance the character will say it
+when it's night in the game";r
 26;16240;SELECT_COMMON1;"The character is selected
 e.g. with a left mouse click";f
 27;16241;SELECT_COMMON2;"The character is selected
