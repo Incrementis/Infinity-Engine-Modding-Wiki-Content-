@@ -14,24 +14,24 @@ With the party's reputation";5_
 with the party's reputation";6_
 5;-1;UNHAPPY_BREAKING_POINT;"Not at all compatible 
 With the party's reputation";j_
-6;16236;LEADER;"The specific character portrait is 
+6;89115;LEADER;"The specific character portrait is 
 Dragged and dropped to the very top";b
-7;16237;TIRED;"Character is tired
+7;89116;TIRED;"Character is tired
 e.g. after a long journey without a break";c
-8;16238;BORED;The character stands still for a while;d
-9;16235;BATTLE_CRY1;A creature is attacked;a
-10;25427;BATTLE_CRY2;A creature is attacked;8
-11;25429;BATTLE_CRY3;A creature is attacked;9
+8;89117;BORED;The character stands still for a while;d
+9;89114;BATTLE_CRY1;A creature is attacked;a
+10;89114;BATTLE_CRY2;A creature is attacked;8
+11;89114;BATTLE_CRY3;A creature is attacked;9
 12;-1;BATTLE_CRY4;A creature is attacked;g_
 13;-1;BATTLE_CRY5;A creature is attacked;h_
 14;-1;;;
 15;-1;;;
 16;-1;;;
 17;-1;;;
-18;16246;DAMAGE;Character is hit;l
-19;16247;DYING;"Character is hit and
+18;89125;DAMAGE;Character is hit;l
+19;89126;DYING;"Character is hit and
 His hit points become zero";m
-20;16239;HURT;"Character is hit and
+20;89118;HURT;"Character is hit and
 His hit points become very low";e
 21;-1;AREA_FOREST;"There's a chance the character will say it
 when he is in forest";n
@@ -43,11 +43,11 @@ when he is in dungeon";p
 when it's day in the game";q
 25;-1;AREA_NIGHT;"There's a chance the character will say it
 when it's night in the game";r
-26;16240;SELECT_COMMON1;"The character is selected
+26;89119;SELECT_COMMON1;"The character is selected
 e.g. with a left mouse click";f
-27;16241;SELECT_COMMON2;"The character is selected
+27;89120;SELECT_COMMON2;"The character is selected
 e.g. with a left mouse click";g
-28;16242;SELECT_COMMON3;"The character is selected
+28;89121;SELECT_COMMON3;"The character is selected
 e.g. with a left mouse click";h
 29;-1;SELECT_COMMON4;"The character is selected
 e.g. with a left mouse click";0
@@ -55,20 +55,20 @@ e.g. with a left mouse click";0
 e.g. with a left mouse click";k_
 31;-1;SELECT_COMMON6;"The character is selected
 e.g. with a left mouse click";l_
-32;16243;SELECT_ACTION1;"After selecting the character, 
+32;89122;SELECT_ACTION1;"After selecting the character, 
 Move it to another position";i
-33;16244;SELECT_ACTION2;"After selecting the character, 
+33;89123;SELECT_ACTION2;"After selecting the character, 
 Move it to another position";j
-34;16245;SELECT_ACTION3;"After selecting the character, 
+34;89124;SELECT_ACTION3;"After selecting the character, 
 Move it to another position";k
-35;-1;SELECT_ACTION4;"The character is repeatedly selected
-e.g. with a left mouse click ";0_
-36;-1;SELECT_ACTION5;"The character is repeatedly selected
-e.g. with a left mouse click";1_
-37;-1;SELECT_ACTION6;"The character is repeatedly selected
-e.g. with a left mouse click";2_
-38;-1;SELECT_ACTION7;"The character is repeatedly selected
-e.g. with a left mouse click";3_
+35;89127;SELECT_ACTION4;"After selecting the character, 
+Move it to another position";s
+36;89128;SELECT_ACTION5;"After selecting the character, 
+Move it to another position";t
+37;89129;SELECT_ACTION6;"After selecting the character, 
+Move it to another position";u
+38;89130;SELECT_ACTION7;"After selecting the character, 
+Move it to another position";v
 39;-1;;;
 40;-1;;;
 41;-1;;;
@@ -93,40 +93,46 @@ e.g. with a left mouse click";3_
 60;-1;;;
 61;-1;;;
 62;-1;;;
-63;-1;;;
-64;-1;;;
-65;-1;CRITICAL_HIT;"When the character attacks 
+63;89131;SELECT_RARE1;"After selecting the character, 
+Move it to another position";w_
+64;89132;SELECT_RARE2;"After selecting the character, 
+Move it to another position";x_
+65;89133;CRITICAL_HIT;"When the character attacks 
 With a critical hit";z
-66;-1;CRITICAL_MISS;"When the character attacks 
+66;100313;CRITICAL_MISS;"When the character attacks 
 With a critical miss";1
-67;-1;TARGET_IMMUNE;"When the character attacks
+67;100314;TARGET_IMMUNE;"When the character attacks
 And the target is immune to its attacks";2
-68;-1;INVENTORY_FULL;"When the character's backpack is full
+68;100315;INVENTORY_FULL;"When the character's backpack is full
 And the player still tries 
 To select an item 
 Into the character’s inventory";3
-69;-1;PICKED_POCKET;"If the character steals successfully
+69;100316;PICKED_POCKET;"If the character steals successfully
 From another creature";4
-70;-1;HIDDEN_IN_SHADOWS;If the character hides successfully;5
-71;-1;SPELL_DISRUPTED;"When the character is disturbed
+70;100317;HIDDEN_IN_SHADOWS;If the character hides successfully;5
+71;100318;SPELL_DISRUPTED;"When the character is disturbed
 at spell casting,
 e.g. by an enemy attack or a
 Disruptive state";6
-72;-1;SET_A_TRAP;If the character sets a trap successfully;7
+72;100319;SET_A_TRAP;If the character sets a trap successfully;7
 73;-1;;;
 74;-1;;;
-75;-1;;;
-76;-1;;;
-77;-1;;;
-78;-1;;;
-79;-1;BGEE_ACTION_ACKNOWLEDGEMENT4;"After selecting the character, 
-Move it to another position";s
-80;-1;BGEE_ACTION_ACKNOWLEDGEMENT5;"After selecting the character, 
-Move it to another position";t
-81;-1;BGEE_ACTION_ACKNOWLEDGEMENT6;"After selecting the character, 
-Move it to another position";u
-82;-1;BGEE_ACTION_ACKNOWLEDGEMENT7;"After selecting the character, 
-Move it to another position";v
+75;-1;BG2EE_SELECT_RARE1;"The character is repeatedly selected
+ e.g. with a left mouse click
+";0_
+76;-1;BG2EE_SELECT_RARE2;"The character is repeatedly selected
+ e.g. with a left mouse click
+";1_
+77;-1;BG2EE_SELECT_RARE3;"The character is repeatedly selected
+ e.g. with a left mouse click
+";2_
+78;-1;BG2EE_SELECT_RARE4;"The character is repeatedly selected
+ e.g. with a left mouse click
+";3_
+79;-1;;;
+80;-1;;;
+81;-1;;;
+82;-1;;;
 83;-1;;;
 84;-1;;;
 85;-1;;;
