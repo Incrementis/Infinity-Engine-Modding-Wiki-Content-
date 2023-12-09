@@ -1,0 +1,150 @@
+"Light Green: Default soundslots
+Dark green: Advanced soundslots
+Orange: BG2EE soundslots that work in BGEE
+Red: Does not trigger for custom player characters
+NOTE: You can also find all filled “SLOT-NAME” cells for some voices in the game’s CHARSND.2DA file (v2.6.6.0).";;;;
+POSITION;"     Example AoN:Trent   
+In Character Creation";SLOT-NAME;EVENT TRIGGER;POSTFIX
+1;33193;MORALE;"Moral failure is triggered, e.g. because of
+low hit points";u_
+2;33189;HAPPY;Matches with the party's reputation;r_
+3;33190;UNHAPPY_ANNOYED;"„Slightly“ inconsistent 
+With the party's reputation";5_
+4;33191;UNHAPPY_SERIOUS;"„Strongly“ incompatible 
+with the party's reputation";6_
+5;33192;UNHAPPY_BREAKING_POINT;"Not at all compatible 
+With the party's reputation";j_
+6;71401;LEADER;"The specific character portrait is 
+Dragged and dropped to the very top";b
+7;33158;TIRED;"Character is tired
+e.g. after a long journey without a break";c
+8;33159;BORED;The character stands still for a while;d
+9;33154;BATTLE_CRY1;A creature is attacked;a
+10;33155;BATTLE_CRY2;A creature is attacked;8
+11;33156;BATTLE_CRY3;A creature is attacked;9
+12;33157;BATTLE_CRY4;A creature is attacked;g_
+13;71400;BATTLE_CRY5;A creature is attacked;h_
+14;-1;;;
+15;-1;;;
+16;-1;;;
+17;-1;;;
+18;33174;DAMAGE;Character is hit;l
+19;33175;DYING;"Character is hit and
+His hit points become zero";m
+20;33160;HURT;"Character is hit and
+His hit points become very low";e
+21;33233;AREA_FOREST;"There's a chance the character will say it
+when he is in forest";n
+22;33234;AREA_CITY;"There's a chance the character will say it
+when he is in city";o
+23;33176;AREA_DUNGEON;"There's a chance the character will say it
+when he is in dungeon";p
+24;33177;AREA_DAY;"There's a chance the character will say it
+when it's day in the game";q
+25;33178;AREA_NIGHT;"There's a chance the character will say it
+when it's night in the game";r
+26;33161;SELECT_COMMON1;"The character is selected
+e.g. with a left mouse click";f
+27;33162;SELECT_COMMON2;"The character is selected
+e.g. with a left mouse click";g
+28;33163;SELECT_COMMON3;"The character is selected
+e.g. with a left mouse click";h
+29;33164;SELECT_COMMON4;"The character is selected
+e.g. with a left mouse click";0
+30;33165;SELECT_COMMON5;"The character is selected
+e.g. with a left mouse click";k_
+31;33166;SELECT_COMMON6;"The character is selected
+e.g. with a left mouse click";l_
+32;33167;SELECT_ACTION1;"After selecting the character, 
+Move it to another position";i
+33;33168;SELECT_ACTION2;"After selecting the character, 
+Move it to another position";j
+34;33169;SELECT_ACTION3;"After selecting the character, 
+Move it to another position";k
+35;33179;SELECT_ACTION4;"The character is repeatedly selected
+ e.g. with a left mouse click
+";0_
+36;33180;SELECT_ACTION5;"The character is repeatedly selected
+ e.g. with a left mouse click
+";1_
+37;71402;SELECT_ACTION6;"The character is repeatedly selected
+ e.g. with a left mouse click
+";2_
+38;71403;SELECT_ACTION7;"The character is repeatedly selected
+ e.g. with a left mouse click
+";3_
+39;-1;;;
+40;-1;;;
+41;-1;;;
+42;-1;;;
+43;-1;;;
+44;-1;;;
+45;-1;;;
+46;-1;;;
+47;-1;;;
+48;-1;;;
+49;-1;;;
+50;-1;;;
+51;-1;;;
+52;-1;;;
+53;33194;REACT_TO_DIE_GENERAL;Happens when a party member dies;w
+54;-1;;;
+55;-1;;;
+56;-1;;;
+57;-1;;;
+58;-1;;;
+59;-1;;;
+60;-1;;;
+61;-1;;;
+62;-1;;;
+63;-1;;;
+64;-1;;;
+65;33181;CRITICAL_HIT;"When the character attacks 
+With a critical hit";z
+66;33182;CRITICAL_MISS;"When the character attacks 
+With a critical miss";1
+67;33183;TARGET_IMMUNE;"When the character attacks
+And the target is immune to its attacks";2
+68;33184;INVENTORY_FULL;"When the character's backpack is full
+And the player still tries 
+To select an item 
+Into the character’s inventory";3
+69;33185;PICKED_POCKET;"If the character steals successfully
+From another creature";4
+70;33186;HIDDEN_IN_SHADOWS;If the character hides successfully;5
+71;33187;SPELL_DISRUPTED;"When the character is disturbed
+at spell casting,
+e.g. by an enemy attack or a
+Disruptive state";6
+72;33188;SET_A_TRAP;If the character sets a trap successfully;7
+73;-1;;;
+74;-1;;;
+75;-1;;;
+76;-1;;;
+77;-1;;;
+78;-1;;;
+79;33170;BGEE_ACTION_ACKNOWLEDGEMENT4;"After selecting the character, 
+Move it to another position";s
+80;33171;BGEE_ACTION_ACKNOWLEDGEMENT5;"After selecting the character, 
+Move it to another position";t
+81;33172;BGEE_ACTION_ACKNOWLEDGEMENT6;"After selecting the character, 
+Move it to another position";u
+82;33173;BGEE_ACTION_ACKNOWLEDGEMENT7;"After selecting the character, 
+Move it to another position";v
+83;-1;;;
+84;-1;;;
+85;-1;;;
+86;-1;;;
+87;-1;;;
+88;-1;;;
+89;-1;;;
+90;-1;;;
+91;-1;;;
+92;-1;;;
+93;-1;;;
+94;-1;;;
+95;-1;;;
+96;-1;;;
+97;-1;;;
+98;-1;;;
+99;-1;;;
