@@ -73,9 +73,9 @@ BEGIN
 	COPY ~./weidu_external/workspace/!_temporaryPatchArray.tph~ ~./weidu_external/%MOD_FOLDER%/temp/arrays/!_patch%!_setArrayName%.tph~  EVALUATE_BUFFER
 	
 	
-	// Includes array element slots as variables into the array (%LNL% means Linux New Line)
+	// Includes array element slots as variables into the array (%WNL% means Windows New Line)
 	OUTER_FOR(index = 0; index < ~!_slotNumbers~; ++index) BEGIN	
-		OUTER_SPRINT ~!_arraySlots~ ~%!_arraySlots%	"%%!_setArrayName%%index%%"%LNL%~	
+		OUTER_SPRINT ~!_arraySlots~ ~%!_arraySlots%	"%%!_setArrayName%%index%%"%WNL%~	
 	END
 	APPEND_OUTER ~./weidu_external/%MOD_FOLDER%/temp/arrays/!_%!_setArrayName%.tph~ ~%!_arraySlots%~
 	APPEND_OUTER ~./weidu_external/%MOD_FOLDER%/temp/arrays/!_patch%!_setArrayName%.tph~ ~%!_arraySlots%~
@@ -192,11 +192,11 @@ BEGIN
 	// to prepare the abstract array element information.
 	ACTION_IF (IS_AN_INT ~%!_arrayValue%~) THEN 
 	BEGIN	
-		OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%LNL%~~~~~		
+		OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%WNL%~~~~~		
 	// If value is not integer then it is string
 	END ELSE 
 	BEGIN		
-		OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SPRINT ~%!_useArrayName%%!_position%~ ~%!_arrayValue%~%LNL%~~~~~
+		OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SPRINT ~%!_useArrayName%%!_position%~ ~%!_arrayValue%~%WNL%~~~~~
 	END
 	
 	// If all values are collected then write it into array
@@ -292,11 +292,11 @@ BEGIN
 	// to prepare the abstract array element information.
 	PATCH_IF (IS_AN_INT ~%!_arrayValue%~) THEN 
 	BEGIN	
-		SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%LNL%~~~~~		
+		SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%WNL%~~~~~		
 	// If value is not integer then it is string
 	END ELSE 
 	BEGIN	
-		SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SPRINT ~%!_useArrayName%%!_position%~ ~%!_arrayValue%~%LNL%~~~~~
+		SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SPRINT ~%!_useArrayName%%!_position%~ ~%!_arrayValue%~%WNL%~~~~~
 	END
 	
 	// If all values are collected then write it into array
