@@ -1,0 +1,100 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+BACKUP ~./weidu_external/games_insecure_compatibility/backup~ // %MOD_FOLDER% doesn't work here
+AUTHOR ~YOU~
+VERSION ~v0.0.0~
+//AUTO_EVAL_STRINGS// This will prevent the need of EVAL for string variables
+
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/warnings.tph~
+	
+	// CREATING ITEM FILE(for testing patch version)
+	// ----------------------------------------------
+	CREATE ~ITM~ ~Testfile~
+	
+END// End of "ALWAYS"
+
+
+LANGUAGE
+	~English~	// Language
+	~English~	// Directory
+	~%MOD_FOLDER%/en_US/!_warnings.tra~
+	
+LANGUAGE
+	~Deutsch~	// Language
+	~German~	// Directory
+	~%MOD_FOLDER%/de_DE/!_warnings.tra~
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN ~Games insecure compatibility~
+
+
+// Creates an array with game shortcuts whose compatibilty with the mod is uncertain
+ACTION_DEFINE_ARRAY games_insecure_compatibility
+BEGIN 
+	~bg2~
+	~tob~
+	~iwd2~
+	~pst~
+	~bg1~
+	~totsc~
+	~iwd1~
+	~how~
+	~totlm~
+	~tutu~
+	~tutu_totsc~
+	~bgt~
+	~ca~
+	~iwd_in_bg2~
+	~bgee~
+	~bg2ee~
+	~eet~
+	~iwdee~
+	~pstee~
+END
+
+// OUTSIDE OF PATCHING
+// -------------------
+OUTER_SPRINT warning @2147483646
+
+// Checks all game shortcuts
+OUTER_FOR (index = 0; VARIABLE_IS_SET $games_insecure_compatibility(~%index%~); ++index) BEGIN
+
+	// Gets specific game shortcut
+	OUTER_TEXT_SPRINT game $games_insecure_compatibility(~%index%~)
+
+	// Calls warning 
+	LAF WARN_EVALUATE_GAME_EXISTANCE 
+		STR_VAR 
+			game 	= EVAL ~%game%~
+			message = EVAL ~%warning%~
+		END
+END
+
+
+// PATCHING ITEM TESTFILE
+// ----------------------
+COPY_EXISTING ~Testfile.ITM~ ~%MOD_FOLDER%~
+SPRINT warning @2147483646
+
+// Checks all game shortcuts
+FOR (index = 0; VARIABLE_IS_SET $games_insecure_compatibility(~%index%~); ++index) BEGIN
+
+	// Gets specific game shortcut
+	TEXT_SPRINT game $games_insecure_compatibility(~%index%~)
+
+	// Calls warning 
+	LPF WARN_EVALUATE_GAME_EXISTANCE 
+		STR_VAR 
+			game 	= EVAL ~%game%~
+			message = EVAL ~%warning%~
+		END
+END

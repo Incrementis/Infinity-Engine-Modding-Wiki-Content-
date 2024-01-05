@@ -1,0 +1,27 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+// CHECKS MODMERGE/DLC-MERGER INSTALLATION
+// ---------------------------------------
+// Creates a file array
+ACTION_DEFINE_ARRAY files 
+BEGIN 
+	~dlc/sod-dlc.zip~ 
+	~sod-dlc.zip~ 
+END
+
+
+OUTER_SPRINT warning @2147483644
+
+
+// Checks all files
+OUTER_FOR (index = 0; VARIABLE_IS_SET $files(~%index%~); ++index) BEGIN
+
+	// Gets specific file
+	OUTER_TEXT_SPRINT file $files(~%index%~)
+
+	// Calls warning 
+	LAF WARN_EVALUATE_FILE_EXISTANCE 
+		STR_VAR 
+			file 	= EVAL ~%file%~
+			message = EVAL ~%warning%~
+		END
+END

@@ -1,0 +1,46 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+BACKUP ~./weidu_external/errorWarningTest/backup~ // %MOD_FOLDER% doesn't work here
+AUTHOR ~YOU~
+VERSION ~v0.0.0~
+//AUTO_EVAL_STRINGS// This will prevent the need of EVAL for string variables
+
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/errors.tph~
+	INCLUDE ~%MOD_FOLDER%/lib/warnings.tph~
+	
+END// End of "ALWAYS"
+
+
+LANGUAGE
+	~English~	// Language
+	~English~	// Directory
+	~%MOD_FOLDER%/en_US/!_errors.tra~
+	~%MOD_FOLDER%/en_US/!_warnings.tra~
+	
+LANGUAGE
+	~Deutsch~	// Language
+	~German~	// Directory
+	~%MOD_FOLDER%/de_DE/!_errors.tra~
+	~%MOD_FOLDER%/de_DE/!_warnings.tra~
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN ~Error and warning tests~
+
+// GLOBAL INCLUDES(Don't touch this!)
+// ----------------------------------	
+INCLUDE ~%MOD_FOLDER%/proprietary/errors/!_CheckIEgames.tpa~
+
+
+// FOOTER INCLUDES
+// ---------------
+INCLUDE ~%MOD_FOLDER%/proprietary/warnings/!_CheckSOD.tpa~
+INCLUDE ~%MOD_FOLDER%/proprietary/warnings/!_CheckIEgames.tpa~

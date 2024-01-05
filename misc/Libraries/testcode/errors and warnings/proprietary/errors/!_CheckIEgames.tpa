@@ -1,0 +1,44 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+// CHECKS COMPATIBILITY
+// --------------------
+// Creates an array with game shortcuts which are incompatible with mod
+ACTION_DEFINE_ARRAY games_incompatible
+BEGIN 
+	~bg2~
+ 	~tob~
+	~iwd2~
+	~pst~
+	~bg1~
+	~totsc~
+	~iwd1~
+	~how~
+	~totlm~
+	~tutu~
+	~tutu_totsc~
+	~bgt~
+	~ca~
+	~iwd_in_bg2~
+	~bgee~
+	~bg2ee~
+	~eet~
+	~iwdee~
+	~pstee~ 
+END
+
+
+OUTER_SPRINT error @2147483647
+
+
+// Checks all game shortcuts
+OUTER_FOR (index = 0; VARIABLE_IS_SET $games_incompatible(~%index%~); ++index) BEGIN
+
+	// Gets specific game shortcut
+	OUTER_TEXT_SPRINT game $games_incompatible(~%index%~)
+
+	// Calls error 
+	LAF ERR_EVALUATE_GAME_EXISTANCE 
+		STR_VAR 
+			game 	= EVAL ~%game%~
+			message = EVAL ~%error%~
+		END
+END

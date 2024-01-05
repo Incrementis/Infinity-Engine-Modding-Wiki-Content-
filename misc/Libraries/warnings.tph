@@ -1,0 +1,45 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+//------------------------------------------//
+// Contains custom defined warning functions//
+//------------------------------------------//
+
+// Purpose: Raises a warning if the specified file exists
+// ------------------------------------------------------
+// Parameters:|
+// ============
+// file 	-> The name of the file to check for existence
+// message	-> The warning message to display upon file existence
+DEFINE_DIMORPHIC_FUNCTION ~WARN_EVALUATE_FILE_EXISTANCE~
+	STR_VAR
+		file 	= ~~
+		message = ~~
+BEGIN
+	ACTION_IF (FILE_EXISTS ~%file%~) THEN 
+	BEGIN
+        PRINT ~--------~
+		PRINT ~WARNING:~
+        PRINT ~--------~
+        PRINT ~%message%~
+	END
+END // End of "WARN_EVALUATE_FILE_EXISTANCE"
+
+
+// Purpose: Raises a warning if the specified WeiDU game short is detected
+// -----------------------------------------------------------------------
+// Parameters:|
+// ============
+// game 	-> The WeiDU game short identifier to check for installation
+// message	-> The warning message to display if the specified game is detected
+DEFINE_DIMORPHIC_FUNCTION ~WARN_EVALUATE_GAME_EXISTANCE~
+	STR_VAR
+		game 	= ~~
+		message = ~~
+BEGIN
+	ACTION_IF (GAME_IS ~%game%~) THEN 
+	BEGIN
+        PRINT ~--------~
+		PRINT ~WARNING:~
+        PRINT ~--------~
+        PRINT ~%message%~
+	END
+END // End of "WARN_EVALUATE_GAME_EXISTANCE"

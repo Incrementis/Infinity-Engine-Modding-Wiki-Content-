@@ -1,0 +1,24 @@
+ERROR (E): Integer value is not divisible by 2;;;
+;;;
+WARNING (W): Integer value is divisible by 2;;;
+;;;
+"Please check “WeiDU_TRA_Errors_and_Warnings.txt” for the reason why this table is created.
+The integer value for @integer in the TRA file starts at 2147483647. 
+32-bit integer range (-2147483648 .. 2147483647).
+Negative values are forbidden.";;;
+Integer;Type;Comment;Example
+2147483647;E;Checks if a specific game is missing;"Throws an error if the user tries 
+To install the mod in the wrong game"
+2147483646;W;Checks if a specific game is missing;"Throws a warning when the user installs 
+A mod for a game
+The mod has not been tested"
+2147483645;E;"Checks if file dlc/sod-dlc.zip 
+or file sod-dlc.zip exists";"Returns an error when the user tries
+To install the mod in SoD,
+because Modmerge or DLCmerger were not used
+To extract the SoD zip files"
+2147483644;W;"Checks if file dlc/sod-dlc.zip 
+or file sod-dlc.zip exists";"Returns a warning when the user tries
+To install the mod in SoD,
+because Modmerge or DLCmerger were not used
+To extract the SoD zip files"

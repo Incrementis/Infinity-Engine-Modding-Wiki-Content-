@@ -1,0 +1,12 @@
+It makes sense to have some error and warning messages in different languages.
+The corresponding table defines fixed integer values ​​for self-defined errors and warnings.
+
+The reason for this is that the user can be:
+* Inexperienced
+(Can speak the language but does not have sufficient expertise to understand the content)
+
+* Weak
+(Makes a lot of effort, but can't speak the language properly to understand the content)
+
+* Lazy
+(Looks superficially at the console and closes it)
