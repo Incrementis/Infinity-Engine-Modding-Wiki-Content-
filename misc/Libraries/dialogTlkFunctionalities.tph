@@ -49,9 +49,12 @@ END// End of "RESOLVE_STR_REF_WITH_STRINGS"
 
 
 
+// WARNING: DO NOT USE THIS FUNCTION! Use WeiDU's NEXT_STRREF instead to determine the highest strref!
 // Purpose: Calculates the highest strref value in dialog.tlk
-//			by iteratively counting through the file.
-// -----------------------------------------------------------
+//			by iteratively counting through the file. 
+//			Returns an incorrect value when used for a language other than English
+// 			regarding the Enhanced Edition versions.
+// -----------------------------------------------------------------------------------------------------
 // Parameters:|
 // ============
 // strRef -> The highest strref value in dialog.tlk
