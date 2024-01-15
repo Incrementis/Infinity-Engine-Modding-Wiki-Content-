@@ -71,4 +71,7 @@ BEGIN
 	// of the loop increments strRef even though it is not a valid strref value.
 	OUTER_SET strRef = strRef - 1
 	
+	// Function is deprecated
+	WARN ~HIGHEST_STR_REF_BY_COUNTING -> DO NOT USE THIS FUNCTION! Use WeiDU's NEXT_STRREF instead to determine the highest strref!~
+	
 END// End of "HIGHEST_STR_REF_BY_COUNTING"
