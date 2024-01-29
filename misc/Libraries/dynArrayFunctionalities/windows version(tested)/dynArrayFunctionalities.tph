@@ -26,7 +26,7 @@ DEFINE_ACTION_MACRO DYN_ARRAY_CREATE
 BEGIN
 	// ALL VARIABLES IN THIS MACRO AND DEFAULT VALUES
 	// ----------------------------------------------
-	// INTEGER 			~!_slotNumbers~ 	= "-1"
+	// INTEGER 			~!_slotNumbers~ 	= 0
 	// STRING 			~!_setArrayName~ 	~!_NULL~
 	// INTEGER			index				= 0
 	// STRING			~!_arraySlots~ 		~~
@@ -191,8 +191,16 @@ BEGIN
 	// Checks if the array value is an integer and calls the appropriate function
 	// to prepare the abstract array element information.
 	ACTION_IF (IS_AN_INT ~%!_arrayValue%~) THEN 
-	BEGIN	
-		OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%WNL%~~~~~		
+	BEGIN
+		ACTION_IF (~%!_arrayValue%~ > "-1") THEN 
+		BEGIN
+			// Positive values including 0
+			OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%WNL%~~~~~
+		END	ELSE 
+		BEGIN
+			// Negative values
+			OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SET ~%!_useArrayName%%!_position%~ = "%!_arrayValue%"%WNL%~~~~~
+		END
 	// If value is not integer then it is string
 	END ELSE 
 	BEGIN		
@@ -291,8 +299,16 @@ BEGIN
 	// Checks if the array value is an integer and calls the appropriate function
 	// to prepare the abstract array element information.
 	PATCH_IF (IS_AN_INT ~%!_arrayValue%~) THEN 
-	BEGIN	
-		SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%WNL%~~~~~		
+	BEGIN
+		PATCH_IF (~%!_arrayValue%~ > "-1") THEN 
+		BEGIN
+			// Positive values including 0
+			SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%WNL%~~~~~
+		END	ELSE 
+		BEGIN
+			// Negative values
+			SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SET ~%!_useArrayName%%!_position%~ = "%!_arrayValue%"%WNL%~~~~~	
+		END		
 	// If value is not integer then it is string
 	END ELSE 
 	BEGIN	
