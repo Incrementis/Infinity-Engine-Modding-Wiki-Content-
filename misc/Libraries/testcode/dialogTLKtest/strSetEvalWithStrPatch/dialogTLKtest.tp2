@@ -1,0 +1,65 @@
+// -----------
+// Information
+// -----------
+BACKUP ~weidu_external/dialogTLKtest/backup~ // %MOD_FOLDER% doesn't work here
+AUTHOR ~Yes~
+VERSION ~v0.0.0~
+
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't touch these)
+	// -----------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/dialogTlkFunctionalities.tph~
+		
+	// CREATING ITEM FILE(for testing patch version)
+	// ----------------------------------------------
+	CREATE ~ITM~ ~Testfile~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN ~TLK-Testing~
+// Copy soundfile to language folder
+COPY ~%MOD_FOLDER%/sound~ 	~lang/%LANGUAGE%/sounds~
+
+// PATCHING ITEM TESTFILE
+// ----------------------
+COPY_EXISTING ~Testfile.ITM~ ~%MOD_FOLDER%~
+// This will add to a specific strref the text "Become Ladder!" 
+// and the sound file "!_DEMBb.wav"
+LPF RESOLVE_STR_REF_WITH_STRINGS
+	STR_VAR
+		text = ~Become Ladder!~
+		sound = ~!_DEMBb~
+	RET
+		refValue = strRef
+END
+// Prints strref which of text "Become Ladder!" and soundfile "!_DEMBb.wav"
+PATCH_PRINT ~BEFORE(refValue):%refValue%~
+
+// Repairs the text in dalog.tlk
+LPF STR_SET_EVAL_WITH_STRINGS
+INT_VAR
+	strref 	= refValue
+STR_VAR
+	text 	= ~Becoming Leader!~
+	sound	= ~!_DEMBb~
+END
+
+// This will add to a specific strref the text "Becoming Leader!" 
+// and the sound file "!_DEMBb.wav"
+LPF RESOLVE_STR_REF_WITH_STRINGS
+	STR_VAR
+		text = ~Becoming Leader!~
+		sound = ~!_DEMBb~
+	RET
+		refValue = strRef
+END
+// The value should match the first refValue, regardless of the text.
+PATCH_PRINT ~AFTER(refValue):%refValue%~
