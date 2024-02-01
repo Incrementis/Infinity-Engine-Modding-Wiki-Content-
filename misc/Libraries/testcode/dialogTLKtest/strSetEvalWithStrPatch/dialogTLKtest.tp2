@@ -52,8 +52,8 @@ STR_VAR
 	sound	= ~!_DEMBb~
 END
 
-// This will add to a specific strref the text "Becoming Leader!" 
-// and the sound file "!_DEMBb.wav"
+// Checks the dialog.tlk whether there is an entry 
+// with the text “Becoming Leader!” and sound file e.g. !_DEMBb.wav
 LPF RESOLVE_STR_REF_WITH_STRINGS
 	STR_VAR
 		text = ~Becoming Leader!~
