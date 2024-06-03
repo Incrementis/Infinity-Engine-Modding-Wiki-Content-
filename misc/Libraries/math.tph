@@ -1,0 +1,66 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+//----------------------------------------------//
+// Contains self defined mathematical operations//
+//----------------------------------------------//
+
+
+// Purpose: Takes two numbers and returns the result rounded up or rounded down after division.
+// --------------------------------------------------------------------------------------------
+// Parameters:|
+// ============
+// dividend -> The number which is divided by divisor
+// divisor	-> The number which divides the dividend
+// mode		-> Mode "floor" rounds down and mode "roof" rounds up.
+// result	-> Returns the result of division
+DEFINE_DIMORPHIC_FUNCTION ~DIVISION_ROUNDING~
+	INT_VAR
+		dividend 	= 0
+		divisor		= 0
+	STR_VAR
+		mode		= ~!_NULL~
+	RET
+		result
+BEGIN
+	// Checks if a valid rounding mode is selected 
+	ACTION_IF NOT((~%mode%~ STRING_EQUAL ~floor~) OR (~%mode%~ STRING_EQUAL ~roof~)) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION DIVISION_ROUNDING -> The correct argument for mode is missing. The argument %mode% is forbidden. Use "floor" or "roof" as argument.~
+	END
+	// Prevents division by zero
+	ACTION_IF (~%divisor%~ == 0) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION DIVISION_ROUNDING -> Value 0 for divisor is forbidden.~
+	END
+		
+		
+	// -- Rounds up
+	ACTION_IF (~%mode%~ STRING_EQUAL ~roof~) THEN
+	BEGIN
+		
+		// Integer division truncates towards zero (e.g., 7 / 2 = 3)
+		OUTER_SET ~result~ 	= (~%dividend%~/~%divisor%~)
+		// Check if there's a remainder after the division
+		OUTER_SET ~rest~ 	= ~%dividend%~ MODULO ~%divisor%~
+		// If there's a remainder, adjust the result based on signs
+		ACTION_IF (~%rest%~ != 0) THEN
+		BEGIN
+			ACTION_IF (~%result%~ < 0) THEN
+			BEGIN
+				// Adds 1 to negative results
+				OUTER_SET ~result~ = ~%result%~ -1
+				
+			END ELSE ACTION_IF (~%result%~ > 0) THEN
+			BEGIN
+				// Adds 1 to positive results 
+				OUTER_SET ~result~ = ~%result%~ +1
+			END
+		END		
+	
+	
+	// -- Rounds down	
+	END ELSE ACTION_IF (~%mode%~ STRING_EQUAL ~floor~) THEN
+	BEGIN
+		OUTER_SET ~result~ = (~%dividend%~/~%divisor%~)
+	END
+	
+END // End of "DIVISION_ROUNDING"

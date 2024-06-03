@@ -1,0 +1,115 @@
+BACKUP "weidu_external\math\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/math.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing math lib"
+
+// -- EXAMPLE: Rounds down (10/3 = 3,333 -> 3)
+OUTER_SPRINT ~myMode~ ~floor~
+
+LAF ~DIVISION_ROUNDING~
+	INT_VAR
+		dividend 	= 10
+		divisor		= 3
+	STR_VAR
+		mode		= EVAL ~%myMode%~
+	RET
+		myResult 	= result
+END
+
+PRINT ~Rounded down: %myResult%~
+
+
+// -- EXAMPLE: Rounds up (10/3 = 3,333 -> 4)
+OUTER_SPRINT ~myMode~ ~roof~
+
+LAF ~DIVISION_ROUNDING~
+	INT_VAR
+		dividend 	= 10
+		divisor		= 3
+	STR_VAR
+		mode		= EVAL ~%myMode%~
+	RET
+		myResult 	= result
+END
+
+PRINT ~Rounded up: %myResult%~
+
+
+// -- EXAMPLE: Rounds down (10/-3 = -3,333 -> -3)
+OUTER_SPRINT ~myMode~ ~floor~
+
+LAF ~DIVISION_ROUNDING~
+	INT_VAR
+		dividend 	= 10
+		divisor		= "-3"
+	STR_VAR
+		mode		= EVAL ~%myMode%~
+	RET
+		myResult 	= result
+END
+
+PRINT ~Rounded down: %myResult%~
+
+
+// -- EXAMPLE: Rounds up (-10/3 = -3,333 -> -4)
+OUTER_SPRINT ~myMode~ ~roof~
+
+LAF ~DIVISION_ROUNDING~
+	INT_VAR
+		dividend 	= "-10"
+		divisor		= 3
+	STR_VAR
+		mode		= EVAL ~%myMode%~
+	RET
+		myResult 	= result
+END
+
+PRINT ~Rounded up: %myResult%~
+
+
+// -- EXAMPLE: Rounds down (-10/-3 = 3,333 -> 3)
+OUTER_SPRINT ~myMode~ ~floor~
+
+LAF ~DIVISION_ROUNDING~
+	INT_VAR
+		dividend 	= "-10"
+		divisor		= "-3"
+	STR_VAR
+		mode		= EVAL ~%myMode%~
+	RET
+		myResult 	= result
+END
+
+PRINT ~Rounded down: %myResult%~
+
+
+// -- EXAMPLE: Rounds up (-10/-3 = 3,333 -> 4)
+OUTER_SPRINT ~myMode~ ~roof~
+
+LAF ~DIVISION_ROUNDING~
+	INT_VAR
+		dividend 	= "-10"
+		divisor		= "-3"
+	STR_VAR
+		mode		= EVAL ~%myMode%~
+	RET
+		myResult 	= result
+END
+
+PRINT ~Rounded up: %myResult%~
