@@ -1,0 +1,48 @@
+BACKUP "weidu_external\2daHandling\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/2daHandling.tph~
+	// CREATING ITEM FILE(for testing patch version)
+	// ----------------------------------------------
+	CREATE ~ITM~ ~Testfile~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing 2daHandling lib"
+// Testvariables
+OUTER_SET MyInventorySlotType = 35
+OUTER_SPRINT MySoundGrab  ~GAM_40A~
+OUTER_SPRINT MySoundDrop  ~GAM_40B~
+
+// Writes a new item type into the itemtype.2da and returns the reference value.
+LAF ADD_ITEMTYPE_IN_2DA
+		INT_VAR
+			inventorySlotType 	= ~%MyInventorySlotType%~
+		STR_VAR
+			soundGrab			= EVAL ~%MySoundGrab%~
+			soundDrop			= EVAL ~%MySoundDrop%~
+		RET
+			myNewType 			= typeNumber
+END
+
+PRINT ~%myNewType%~
+
+
+// PATCHING ITEM TESTFILE
+// ----------------------
+COPY_EXISTING ~Testfile.ITM~ override
+// Writes the new item type into the newly created ITM file.
+WRITE_SHORT 0x001c	~%myNewType%~
+BUT_ONLY
