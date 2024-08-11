@@ -20,7 +20,7 @@
 //							This value is needed to reference the new item type to an item. 
 DEFINE_DIMORPHIC_FUNCTION ~ADD_ITEMTYPE_IN_2DA~
 	INT_VAR
-		inventorySlotType 	= "-1"
+		inventorySlotType 	= 0
 	STR_VAR
 		soundGrab			= ~0~
 		soundDrop			= ~0~
@@ -39,17 +39,11 @@ BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%soundDrop%~
 		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundDrop%' for soundDrop is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
 	END
-	// Checks if inventorySlotType is within 2-byte signed integer value (positive values)
-	ACTION_IF (~%inventorySlotType%~ > 32767) THEN
+	// Checks that inventorySlotType is not a negative number, because there are no negative slot numbers.
+	ACTION_IF (~%inventorySlotType%~ < 0) THEN
 	BEGIN
-		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%inventorySlotType%' for inventorySlotType is too large. The maximum allowed number is 32767, due to signed 2 byte size. Please adjust the inventorySlotType value to be within the allowed range.~
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%inventorySlotType%' for inventorySlotType is too small. The minimum allowed number is 0, because there are no negative slot numbers in game. Please adjust the inventorySlotType value to be within the allowed range.~
 	END
-	// Checks if inventorySlotType is within 2-byte signed integer value (negative values)
-	ACTION_IF (~%inventorySlotType%~ < "-32768") THEN
-	BEGIN
-		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%inventorySlotType%' for inventorySlotType is too small. The minimum allowed number is -32768, due to signed 2 byte size. Please adjust the inventorySlotType value to be within the allowed range.~
-	END
-	
 
 	COPY_EXISTING ~ITEMTYPE.2DA~ ~override~
 		// Gets the number of columns and rows in the file.
@@ -61,6 +55,11 @@ BEGIN
 		// This works because hex value begins by 0x00.
 		// See: https://gibberlings3.github.io/iesdp/file_formats/ie_formats/itm_v1.htm#Header_ItemType 
 		SET typeNumber = ~%type%~ + 1
+		// Checks if typeNumber is within 2-byte unsigned integer value
+		ACTION_IF (~%typeNumber%~ > 65535) THEN
+		BEGIN
+			FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The value '%typeNumber%' for typeNumber exceeds 2MB. The maximum number of allowed item types is 65536~
+		END	
 		// Adds a new row to the bottom of the file with the calculated type, sounds, and slot.
 		APPEND ~ITEMTYPE.2DA~ "%typeNumber%         %soundGrab%    %soundDrop%    %inventorySlotType%"
 	BUT_ONLY // End of "COPY_EXISTING"
