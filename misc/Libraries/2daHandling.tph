@@ -31,13 +31,13 @@ BEGIN
 	ACTION_IF (STRING_LENGTH ~%soundGrab%~ > 8) THEN
 	BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%soundGrab%~
-		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundGrab%' for sound is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundGrab%' for soundGrab is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
 	END
 	// Checks if drop sound name has more than 8 characters
 	ACTION_IF (STRING_LENGTH ~%soundDrop%~ > 8) THEN
 	BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%soundDrop%~
-		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundDrop%' for sound is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundDrop%' for soundDrop is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
 	END
 	// Checks that inventorySlotType is not a negative number, because there are no negative slot numbers.
 	ACTION_IF (~%inventorySlotType%~ < 0) THEN
