@@ -31,13 +31,13 @@ BEGIN
 	ACTION_IF (STRING_LENGTH ~%soundGrab%~ > 8) THEN
 	BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%soundGrab%~
-		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundGrab%' for soundGrab is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundGrab%' for sound is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
 	END
 	// Checks if drop sound name has more than 8 characters
 	ACTION_IF (STRING_LENGTH ~%soundDrop%~ > 8) THEN
 	BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%soundDrop%~
-		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundDrop%' for soundDrop is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundDrop%' for sound is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
 	END
 	// Checks that inventorySlotType is not a negative number, because there are no negative slot numbers.
 	ACTION_IF (~%inventorySlotType%~ < 0) THEN
@@ -47,14 +47,37 @@ BEGIN
 
 	COPY_EXISTING ~ITEMTYPE.2DA~ ~override~
 		// Gets the number of columns and rows in the file.
-		COUNT_2DA_COLS numCols
-		COUNT_2DA_ROWS ~%numCols%~ numRows
-		// Gets the specific value of a cell. In this case the first cell in last row and first column.
-		READ_2DA_ENTRY (~%numRows%~-1) 0 ~%numCols%~ type
+		COUNT_2DA_COLS numCols		
+		// PSTEE itemtype.2da has more cloumns than the other EE games,
+		// but will result in wrong item type number if not set to 4 columns.
+		PATCH_IF (GAME_IS ~pstee~) THEN
+		BEGIN
+			SET numCols = 4
+		END	
+		// Reads the entire 2DA content into memory.
+		READ_2DA_ENTRIES_NOW ~itemtypes~ ~%numCols%~
+		
+		FOR (rowIndex = 0; rowIndex < itemtypes; ++rowIndex) BEGIN
+			// Gets the unique identifier for the item type from the list of item types.
+			READ_2DA_ENTRY_FORMER itemtypes rowIndex 0 itemTypeId
+			// Creates an array of item type reference numbers from the first column.
+			SPRINT $itemtypes("%rowIndex%") "%itemTypeId%"
+		END
+		
+		// Finds the highest item type reference number. 
+		SET ~maxTypeNumber~ = 0
+		PHP_EACH itemtypes AS key => value BEGIN
+			
+			PATCH_IF (~%maxTypeNumber%~ < ~%value%~) THEN
+			BEGIN
+				SET ~maxTypeNumber~ = ~%value%~
+			END
+		END		
+		
 		// Calculates the new item type by incrementing the existing value.
 		// This works because hex value begins by 0x00.
 		// See: https://gibberlings3.github.io/iesdp/file_formats/ie_formats/itm_v1.htm#Header_ItemType 
-		SET typeNumber = ~%type%~ + 1
+		SET typeNumber = ~%maxTypeNumber%~ + 1
 		// Checks if typeNumber is within 2-byte unsigned integer value
 		ACTION_IF (~%typeNumber%~ > 65535) THEN
 		BEGIN
