@@ -1,0 +1,32 @@
+BACKUP "weidu_external\IdsHandling\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/IdsHandling.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing IdsHandling lib"
+
+OUTER_SPRINT myCategoryName 	~PoTION~ // Case sensitive is ignored
+
+// Reads from the itemcat.ids and returns the value od that specific category.
+LAF READ_ITEMCATEGORY_ID_FROM_IDS
+	STR_VAR
+		categoryName	= EVAL ~%myCategoryName%~
+	RET
+		myTypeNumber = typeNumber
+END
+
+PRINT ~myTypeNumber:%myTypeNumber%~

@@ -1,0 +1,31 @@
+BACKUP "weidu_external\IdsHandling\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/IdsHandling.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing IdsHandling lib"
+// Testvariables
+OUTER_SET myTypeNumber 			= 700
+OUTER_SPRINT myCategoryName 	~NCHAKU~ // E.g. Nunchaku
+
+// Adds the value 700 and NCHAKU into itemcat.ids last row.
+LAF ~ADD_ITEMCATEGORY_IN_IDS~
+	INT_VAR
+		typeNumber 		= ~%myTypeNumber%~
+	STR_VAR
+		categoryName	= EVAL ~%myCategoryName%~
+END

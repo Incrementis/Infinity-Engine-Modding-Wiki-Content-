@@ -1,0 +1,109 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+//----------------------------------------------------------//
+// Contains self defined IDS files related functionalities  //
+//----------------------------------------------------------//
+
+
+// Purpose: Adds an item category to the itemcat.ids file. 
+//			This function is useful in conjunction with ADD_ITEMTYPE_IN_2DA.
+// -------------------------------------------------------------------------
+// Parameters:|
+// ============
+// typeNumber  	->  The unique numerical identifier for the item category,
+//                 	corresponding to the item type number in itemtype.2da.
+// categoryName -> 	The descriptive name of the item category (e.g., "POTION").
+DEFINE_DIMORPHIC_FUNCTION ~ADD_ITEMCATEGORY_IN_IDS~
+	INT_VAR
+		typeNumber 		= "-1"
+	STR_VAR
+		categoryName	= ~!_NULL~
+BEGIN
+	// Checks if type number is within 2-byte unsigned integer value.
+	ACTION_IF (~%typeNumber%~ > 65535) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMCATEGORY_IN_IDS -> The value '%typeNumber%' for typeNumber exceeds 2MB. The maximum number of allowed item types is 65536~
+	END
+	// Checks if type number is not negative.
+	ACTION_IF (~%typeNumber%~ <= "-1") THEN 
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMCATEGORY_IN_IDS -> The value '%typeNumber%' for typeNumber is negative. Negative values for typeNumber are forbidden.~
+	END
+	// Checks if category name has more than 8 characters.
+	ACTION_IF (STRING_LENGTH ~%categoryName%~ > 8) THEN
+	BEGIN
+		OUTER_SET numbers = STRING_LENGTH ~%categoryName%~
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMCATEGORY_IN_IDS -> The argument '%categoryName%' for categoryName is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
+	END
+	// Checks if a category name is given.
+	ACTION_IF (~%categoryName%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMCATEGORY_IN_IDS -> The correct argument for categoryName is missing. The argument !_NULL is forbidden.~
+	END
+	
+	// Append new item category to itemcat.ids file
+	COPY_EXISTING ~ITEMCAT.IDS~ ~override~
+		// Get the number of columns and rows in the file.
+		COUNT_2DA_COLS numCols
+		COUNT_2DA_ROWS ~%numCols%~ numRows
+		// Gets the specific value of a cell. 
+		// In this case the first cell in last row and first column.
+		READ_2DA_ENTRY (~%numRows%~-1) 0 ~%numCols%~ type
+		// Appends the new item category to the end of the file.
+		APPEND ~ITEMCAT.IDS~ "%typeNumber% %categoryName%"
+	BUT_ONLY // End of "COPY_EXISTING"
+
+END // End of "ADD_ITEMCATEGORY_IN_IDS"
+
+
+// Purpose: Reads a specific category ID from itemcat.ids file
+// -----------------------------------------------------------
+// Parameters:|
+// ============
+// categoryName ->	The item type/category name which is searched for.
+// typeNumber  	->  Returns reference number of the specific item type.
+//               	This value is needed to reference the new item type to an item.
+DEFINE_DIMORPHIC_FUNCTION ~READ_ITEMCATEGORY_ID_FROM_IDS~
+	STR_VAR
+		categoryName	= ~!_NULL~
+	RET
+		typeNumber
+BEGIN
+	// Checks if a category name is given.
+	ACTION_IF (~%categoryName%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION READ_ITEMCATEGORY_ID_FROM_IDS -> The correct argument for categoryName is missing. The argument !_NULL is forbidden.~
+	END
+	
+	// Initialize typeNumber for sanity check
+	OUTER_SET typeNumber = "-1" 
+
+	COPY_EXISTING ~ITEMCAT.IDS~ ~override~
+		// Gets the number of columns and rows in the file.
+		COUNT_2DA_COLS numCols		
+		// Reads the entire 2DA content into memory.
+		READ_2DA_ENTRIES_NOW ~itemtypes~ ~%numCols%~
+				
+		FOR (rowIndex = 0; rowIndex < itemtypes; ++rowIndex) BEGIN
+			// Gets the unique identifier for the item type from the list of item types.
+			READ_2DA_ENTRY_FORMER itemtypes rowIndex 0 itemTypeId
+			READ_2DA_ENTRY_FORMER itemtypes rowIndex 1 itemName
+			// Create an array mapping item names to their IDs
+			SPRINT $itemtypes("%itemName%") "%itemTypeId%"
+		END
+
+		// Search for the specified category name in the created array
+		PHP_EACH itemtypes AS key => value BEGIN
+			// Only true if category is found
+			PATCH_IF (~%key%~ STRING_EQUAL_CASE ~%categoryName%~) THEN
+			BEGIN
+				SET typeNumber = ~%value%~
+			END
+		END		
+		// Checks if the category was found
+		PATCH_IF (~%typeNumber%~ == "-1") THEN
+		BEGIN
+			PATCH_WARN ~DEFINE_DIMORPHIC_FUNCTION READ_ITEMCATEGORY_ID_FROM_IDS -> No type number for item type "%categoryName%" was found!~
+		END
+	BUT_ONLY // End of "COPY_EXISTING"
+
+END // End of "READ_ITEMCATEGORY_ID_FROM_IDS"
