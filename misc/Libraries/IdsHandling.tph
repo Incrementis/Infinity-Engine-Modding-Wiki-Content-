@@ -39,7 +39,10 @@ BEGIN
 	BEGIN
 		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMCATEGORY_IN_IDS -> The correct argument for categoryName is missing. The argument !_NULL is forbidden.~
 	END
-	
+
+	// To maintain style uniformity, all existing category names are in uppercase
+	ACTION_TO_UPPER categoryName
+
 	// Append new item category to itemcat.ids file
 	COPY_EXISTING ~ITEMCAT.IDS~ ~override~
 		// Get the number of columns and rows in the file.
