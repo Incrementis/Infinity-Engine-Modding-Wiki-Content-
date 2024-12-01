@@ -1,0 +1,57 @@
+BACKUP "weidu_external\2daHandling\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/2daHandling.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing 2daHandling lib"
+
+// Argument for the parameter
+OUTER_SPRINT backgroundImage  ~NONE~
+
+// Defines a regular array of string references
+ACTION_DEFINE_ARRAY strrefsRegular 
+BEGIN
+  10
+  100
+  1000
+  10000
+END
+
+// Defines an associative array (dictionary) mapping indices to string references
+ACTION_DEFINE_ASSOCIATIVE_ARRAY strrefsDictonary 
+BEGIN
+  0 => 10
+  1 => 100
+  2 => 1000
+  3 => 10000
+END
+
+// Creates a reading sequence 2DA file using the regular array of string references
+LAF CREATE_READINGSEQUENCE_2DA 
+	STR_VAR
+		2daFilename		= "Regul2DA"
+		bgImage 		= EVAL "%backgroundImage%"
+		strrefArray 	= "strrefsRegular"
+END
+
+// Creates a reading sequence 2DA file using the associative array of string references
+LAF CREATE_READINGSEQUENCE_2DA 
+	STR_VAR
+		2daFilename		= "Dict2DA"
+		bgImage 		= EVAL "%backgroundImage%"
+		strrefArray 	= "strrefsDictonary"
+END

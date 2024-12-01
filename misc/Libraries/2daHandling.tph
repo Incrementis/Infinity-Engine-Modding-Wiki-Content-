@@ -31,13 +31,13 @@ BEGIN
 	ACTION_IF (STRING_LENGTH ~%soundGrab%~ > 8) THEN
 	BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%soundGrab%~
-		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundGrab%' for soundGrab is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundGrab%' for soundGrab is %numbers% characters long. The maximum allowed length for this argument is 8 characters.~
 	END
 	// Checks if drop sound name has more than 8 characters
 	ACTION_IF (STRING_LENGTH ~%soundDrop%~ > 8) THEN
 	BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%soundDrop%~
-		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundDrop%' for soundDrop is %numbers% characters long. The maximum allowed length for this argument is 8 characters~
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundDrop%' for soundDrop is %numbers% characters long. The maximum allowed length for this argument is 8 characters.~
 	END
 	// Checks that inventorySlotType is not a negative number, because there are no negative slot numbers.
 	ACTION_IF (~%inventorySlotType%~ < 0) THEN
@@ -87,4 +87,90 @@ BEGIN
 		APPEND ~ITEMTYPE.2DA~ "%typeNumber%         %soundGrab%    %soundDrop%    %inventorySlotType%"
 	BUT_ONLY // End of "COPY_EXISTING"
 
-END // End of "ADD_ITEMTYPE"
+END // End of "ADD_ITEMTYPE_IN_2DA"
+
+
+
+// Purpose: Creates a Reading Sequence 2DA file.
+//			It is basically a simplified "chapter 2da" file with stricter limitations.
+//			Refer to this forum thread for a deeper "chapter 2da" explanation:
+// 			https://www.gibberlings3.net/forums/topic/38904-what-do-the-elements-of-chapterxxx2da-mean/
+//			2DA File Format:
+// --------------------------------------------------------------
+//	2DA     V1.0
+//	NONE
+//       	 0       1       2       3		....
+//	SWITCH  DEFAULT DEFAULT DEFAULT DEFAULT ....
+//	DEFAULT <strref><strref><strref><strref>....
+// --------------------------------------------------------------
+// Parameters:|
+// ============
+// 2daLocation 	-> 	Path to create the 2da file. 
+//					Default is the game's override folder.	
+// 2daFilename 	-> 	Name of the 2da file.
+//					This has to be a string value with max 8 characters. 
+//					No file extension is needed(e.g. "myRESQ00" and not "myRESQ00.2da").
+// bgImage 		->	Name of the background image.
+//					This has to be a string value with max 8 characters. 
+//					No file extension is needed(e.g. "myBgImg" and not "myBgImg.MOS").
+// strrefArray 	->	Array containing all string references (strrefs) 
+//					in the correct order for the "DEFAULT" row.				
+DEFINE_ACTION_FUNCTION ~CREATE_READINGSEQUENCE_2DA~
+STR_VAR
+	2daLocation		= "override"
+	2daFilename		= "!_NULL"
+	bgImage 		= "!_NULL"
+	strrefArray 	= "!_NULL"
+BEGIN
+	// Checks if file name has more than 8 characters
+	ACTION_IF (STRING_LENGTH ~%2daFilename%~ > 8) THEN
+	BEGIN
+		OUTER_SET numbers = STRING_LENGTH ~%2daFilename%~
+		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The argument '%2daFilename%' for file name is %numbers% characters long. The maximum allowed length for this argument is 8 characters.~
+	END
+	// Checks if file name has more than 8 characters
+	ACTION_IF (STRING_LENGTH ~%bgImage%~ > 8) THEN
+	BEGIN
+		OUTER_SET numbers = STRING_LENGTH ~%bgImage%~
+		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The argument '%bgImage%' for background image file name is %numbers% characters long. The maximum allowed length for this argument is 8 characters.~
+	END
+	// Checks if a proper array name is given	
+	ACTION_IF (~%strrefArray%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The correct array name as an argument is missing. The array name !_NULL is forbidden.~
+	END
+
+	// Defines file inline then creates and copies file to location(see COPY)
+	<<<<<<<<./weidu_external/workspace/temporaryFile.2da
+	2DA V1.0
+	%bgImage%>>>>>>>>
+
+	COPY ~./weidu_external/workspace/temporaryFile.2da~ ~./%2daLocation%/%2daFilename%.2da~ EVALUATE_BUFFER
+		// Loop variables
+		SPRINT strrefPrevious 		~~
+		SPRINT coulmnIndexPrevious 	~~
+		SPRINT switchPrevious 		~~
+		FOR (strrefIndex = 0; VARIABLE_IS_SET $~%strrefArray%~(~%strrefIndex%~) ; ++strrefIndex)
+		BEGIN
+			// ---Init variables
+			SPRINT columnIndex 		~%strrefIndex%~
+			SPRINT switch		 	~DEFAULT~
+			SPRINT strref 			$~%strrefArray%~(~%strrefIndex%~)
+			// --- Concatenates
+			SPRINT coulmnIndexRow 	~%coulmnIndexPrevious% ~^~ %columnIndex%~
+			SPRINT switchRow 		~%switchPrevious% ~^~ %switch%~
+			SPRINT strrefRow 		~%strrefPrevious% ~^~ %strref%~
+			// --- Prepairs previous values for next iteration
+			SPRINT coulmnIndexPrevious 	~%coulmnIndexRow%~
+			SPRINT switchPrevious 		~%switchRow%~
+			SPRINT strrefPrevious 		~%strrefRow%~
+		END
+		// --- Fills content
+		APPEND ~%2daFilename%.2da~ ~%coulmnIndexRow%~
+		APPEND ~%2daFilename%.2da~ ~SWITCH%TAB%%switchRow%~
+		APPEND ~%2daFilename%.2da~ ~DEFAULT%TAB%%strrefRow%~
+
+	// --- Formating 2DA file (It is recommended to use PRETTY_PRINT_2DA after all the content of the 2DA is written into file or else inconsistent behaviour can happen.)	
+	COPY ~./%2daLocation%/%2daFilename%.2da~ ~./%2daLocation%/%2daFilename%.2da~ PRETTY_PRINT_2DA
+
+END // End of "CREATE_READINGSEQUENCE_2DA"
