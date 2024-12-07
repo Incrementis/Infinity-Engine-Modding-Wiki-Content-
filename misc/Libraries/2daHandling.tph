@@ -95,10 +95,10 @@ END // End of "ADD_ITEMTYPE_IN_2DA"
 //			It is basically a simplified "chapter 2da" file with stricter limitations.
 //			Refer to this forum thread for a deeper "chapter 2da" explanation:
 // 			https://www.gibberlings3.net/forums/topic/38904-what-do-the-elements-of-chapterxxx2da-mean/
-//			2DA File Format:
+// 2DA File Format:
 // --------------------------------------------------------------
 //	2DA     V1.0
-//	NONE
+//	<background image>
 //       	 0       1       2       3		....
 //	SWITCH  DEFAULT DEFAULT DEFAULT DEFAULT ....
 //	DEFAULT <strref><strref><strref><strref>....
@@ -122,6 +122,16 @@ STR_VAR
 	bgImage 		= "!_NULL"
 	strrefArray 	= "!_NULL"
 BEGIN
+	// Check if valid 2daFilename argument is given.
+	ACTION_IF (~%2daFilename%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The correct argument for 2daFilename is missing. The argument !_NULL is forbidden.~
+	END
+	// Check if valid bgImage argument is given.
+	ACTION_IF (~%bgImage%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The correct argument for bgImage is missing. The argument !_NULL is forbidden.~
+	END
 	// Checks if file name has more than 8 characters
 	ACTION_IF (STRING_LENGTH ~%2daFilename%~ > 8) THEN
 	BEGIN

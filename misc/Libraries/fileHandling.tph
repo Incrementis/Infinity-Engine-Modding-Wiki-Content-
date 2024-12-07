@@ -36,3 +36,76 @@ BEGIN
 	OUTER_SPRINT ~!_filename~ ~!_NULL~
 	
 END// End of "CREATE_FILE"
+
+
+// Purpose: Changes the extension of files with a specific extension (e.g., Audio.ogg to Audio.wav).
+//          The original files are backed up by WeiDU to be restored upon uninstallation.
+// -------------------------------------------------------------------------------------------------
+// Parameters:|
+// ============
+// printBash 	-> If set to 1, prints debugging information about the current file being processed.
+// destructive	-> If set to 1, deletes the original files with the old extension after renaming.
+// sourceDir	-> The directory containing the files to be renamed.
+// oldExtension -> The original file extension to be replaced.
+// newExtension	-> The new file extension to be applied.
+DEFINE_DIMORPHIC_FUNCTION ~CHANGE_EXTENSION~
+	INT_VAR
+		printBash 		= "-1"
+		destructive 	= "-1"
+	STR_VAR
+		sourceDir 		= "!_NULL"
+		oldExtension	= "!_NULL"
+		newExtension	= "!_NULL"
+BEGIN
+	// Checks if valid sourceDir argument is given.
+	ACTION_IF (~%sourceDir%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION CHANGE_EXTENSION -> The correct argument for sourceDir is missing. The argument !_NULL is forbidden.~
+	END
+	// Checks if valid newExtension argument is given.
+	ACTION_IF (~%newExtension%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION CHANGE_EXTENSION -> The correct argument for newExtension is missing. The argument !_NULL is forbidden.~
+	END
+	// Checks if valid oldExtension argument is given.
+	ACTION_IF (~%oldExtension%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION CHANGE_EXTENSION -> The correct argument for oldExtension is missing. The argument !_NULL is forbidden.~
+	END
+	// Checks if old and new extensions are equal.
+	ACTION_IF (~%oldExtension%~ STRING_EQUAL_CASE ~%newExtension%~) THEN 
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION CHANGE_EXTENSION -> Old extension and new extension are the same.~
+	END
+	// Checks if directory exists.
+	ACTION_IF NOT(DIRECTORY_EXISTS ~%sourceDir%~) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION CHANGE_EXTENSION -> %sourceDir% directory doesn't exist.~
+	END
+	
+	// Iterate over files in the source directory with the old extension.
+	ACTION_BASH_FOR ~%sourceDir%~ ~^.+\.%oldExtension%$~ 
+	BEGIN
+		
+		// Print debugging information if enabled.
+		ACTION_IF (~%printBash%~ = 1) THEN
+		BEGIN
+			PRINT ~---------START---------~
+			PRINT "BASH_FOR_DIRECTORY: 	%BASH_FOR_DIRECTORY%"// e.g. "somedir"
+			PRINT "BASH_FOR_FILESPEC: 	%BASH_FOR_FILESPEC%" // e.g. "somedir/yourfile.cre"
+			PRINT "BASH_FOR_FILE: 		%BASH_FOR_FILE%"	 // e.g. "yourfile.cre"		
+			PRINT "BASH_FOR_RES: 		%BASH_FOR_RES%"		 // e.g. "yourfile"	
+			PRINT "BASH_FOR_EXT: 		%BASH_FOR_EXT%"		 // e.g. "cre"
+			PRINT "BASH_FOR_SIZE: 		%BASH_FOR_SIZE%" 	 // e.g. <size of somedir/yourfile.cre>
+		END
+		
+		// Rename the file with the new extension.
+		COPY "%BASH_FOR_FILESPEC%" "%BASH_FOR_DIRECTORY%/%BASH_FOR_RES%.%newExtension%"
+		// Optionally delete the original file if destructive mode is enabled.
+		ACTION_IF (~%destructive%~ = 1) THEN
+		BEGIN
+			DELETE "%BASH_FOR_FILESPEC%"
+		END
+	END// End of "ACTION_BASH_FOR"
+
+END// End of "CHANGE_EXTENSION"

@@ -1,0 +1,46 @@
+BACKUP ~./weidu_external/fileHandling/backup~
+AUTHOR ~YOUR NAME~
+VERSION ~v0.0.0~
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/fileHandling.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN ~Change-Extension-Testing~
+
+// ---TEST 1 (All parameters set)
+//
+// This will print bash variables (see printBash) and
+// deletes the files with the extension ogg while 
+// the new files with WAV extensions are retained.
+LAF CHANGE_EXTENSION
+	INT_VAR
+		printBash 		= 1
+		destructive 	= 1
+	STR_VAR
+		sourceDir 		= EVAL ~%MOD_FOLDER%/ogg~
+		oldExtension	= ~ogg~
+		newExtension	= ~wav~
+END
+
+// ---TEST 2(Only neccessary parameters set)
+// 
+// Comment out the code above(TEST 1) before using the test code below.
+/*
+LAF CHANGE_EXTENSION
+	STR_VAR
+		sourceDir 		= EVAL ~%MOD_FOLDER%/ogg~
+		oldExtension	= ~ogg~
+		newExtension	= ~wav~
+END
+*/
