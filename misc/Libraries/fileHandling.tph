@@ -43,8 +43,8 @@ END// End of "CREATE_FILE"
 // -------------------------------------------------------------------------------------------------
 // Parameters:|
 // ============
-// printBash 	-> If set to 1, prints debugging information about the current file being processed.
-// destructive	-> If set to 1, deletes the original files with the old extension after renaming.
+// printBash 	-> If set to 1, prints debugging information about the current file being processed(optional).
+// destructive	-> If set to 1, deletes the original files with the old extension after renaming(optional).
 // sourceDir	-> The directory containing the files to be renamed.
 // oldExtension -> The original file extension to be replaced.
 // newExtension	-> The new file extension to be applied.
@@ -83,11 +83,11 @@ BEGIN
 		FAIL ~DEFINE_DIMORPHIC_FUNCTION CHANGE_EXTENSION -> %sourceDir% directory doesn't exist.~
 	END
 	
-	// Iterate over files in the source directory with the old extension.
+	// Iterates over files in the source directory with the old extension.
 	ACTION_BASH_FOR ~%sourceDir%~ ~^.+\.%oldExtension%$~ 
 	BEGIN
 		
-		// Print debugging information if enabled.
+		// Prints debugging information if enabled.
 		ACTION_IF (~%printBash%~ = 1) THEN
 		BEGIN
 			PRINT ~---------START---------~
@@ -99,9 +99,9 @@ BEGIN
 			PRINT "BASH_FOR_SIZE: 		%BASH_FOR_SIZE%" 	 // e.g. <size of somedir/yourfile.cre>
 		END
 		
-		// Rename the file with the new extension.
+		// Renames the file with the new extension.
 		COPY "%BASH_FOR_FILESPEC%" "%BASH_FOR_DIRECTORY%/%BASH_FOR_RES%.%newExtension%"
-		// Optionally delete the original file if destructive mode is enabled.
+		// Optionally deletes the original file if destructive mode is enabled.
 		ACTION_IF (~%destructive%~ = 1) THEN
 		BEGIN
 			DELETE "%BASH_FOR_FILESPEC%"
