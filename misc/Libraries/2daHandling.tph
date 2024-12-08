@@ -151,11 +151,11 @@ BEGIN
 	END
 
 	// Defines file inline then creates and copies file to location(see COPY)
-	<<<<<<<<./weidu_external/workspace/temporaryFile.2da
+	<<<<<<<<./weidu_external/workspace/!_temporaryFile.2da
 	2DA V1.0
 	%bgImage%>>>>>>>>
 
-	COPY ~./weidu_external/workspace/temporaryFile.2da~ ~./%2daLocation%/%2daFilename%.2da~ EVALUATE_BUFFER
+	COPY ~./weidu_external/workspace/!_temporaryFile.2da~ ~./%2daLocation%/%2daFilename%.2da~ EVALUATE_BUFFER
 		// Loop variables
 		SPRINT strrefPrevious 		~~
 		SPRINT coulmnIndexPrevious 	~~
