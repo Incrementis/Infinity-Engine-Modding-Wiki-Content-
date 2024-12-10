@@ -187,7 +187,7 @@ END // End of "CREATE_READINGSEQUENCE_2DA"
 
 
 
-// Purpose: Adds a conversable item(Such as Lilarcor) into the itemtype.2DA.
+// Purpose: Adds a conversable item(Such as Lilarcor) into the ITEMDIAL.2DA.
 // -------------------------------------------------------------------------
 // Parameters:|
 // ============
