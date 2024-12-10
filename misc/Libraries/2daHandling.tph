@@ -27,13 +27,13 @@ DEFINE_DIMORPHIC_FUNCTION ~ADD_ITEMTYPE_IN_2DA~
 	RET
 		typeNumber
 BEGIN
-	// Checks if grab sound name has more than 8 characters
+	// Checks if grab sound name has more than 8 characters.
 	ACTION_IF (STRING_LENGTH ~%soundGrab%~ > 8) THEN
 	BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%soundGrab%~
 		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPE_IN_2DA -> The argument '%soundGrab%' for soundGrab is %numbers% characters long. The maximum allowed length for this argument is 8 characters.~
 	END
-	// Checks if drop sound name has more than 8 characters
+	// Checks if drop sound name has more than 8 characters.
 	ACTION_IF (STRING_LENGTH ~%soundDrop%~ > 8) THEN
 	BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%soundDrop%~
@@ -116,11 +116,11 @@ END // End of "ADD_ITEMTYPE_IN_2DA"
 // strrefArray 	->	Array containing all string references (strrefs) 
 //					in the correct order for the "DEFAULT" row.				
 DEFINE_ACTION_FUNCTION ~CREATE_READINGSEQUENCE_2DA~
-STR_VAR
-	2daLocation		= "override"
-	2daFilename		= "!_NULL"
-	bgImage 		= "!_NULL"
-	strrefArray 	= "!_NULL"
+	STR_VAR
+		2daLocation		= "override"
+		2daFilename		= "!_NULL"
+		bgImage 		= "!_NULL"
+		strrefArray 	= "!_NULL"
 BEGIN
 	// Check if valid 2daFilename argument is given.
 	ACTION_IF (~%2daFilename%~ STRING_EQUAL ~!_NULL~) THEN 
@@ -132,19 +132,19 @@ BEGIN
 	BEGIN
 		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The correct argument for bgImage is missing. The argument !_NULL is forbidden.~
 	END
-	// Checks if file name has more than 8 characters
+	// Checks if file name has more than 8 characters.
 	ACTION_IF (STRING_LENGTH ~%2daFilename%~ > 8) THEN
 	BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%2daFilename%~
 		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The argument '%2daFilename%' for file name is %numbers% characters long. The maximum allowed length for this argument is 8 characters.~
 	END
-	// Checks if file name has more than 8 characters
+	// Checks if file name has more than 8 characters.
 	ACTION_IF (STRING_LENGTH ~%bgImage%~ > 8) THEN
 	BEGIN
 		OUTER_SET numbers = STRING_LENGTH ~%bgImage%~
 		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The argument '%bgImage%' for background image file name is %numbers% characters long. The maximum allowed length for this argument is 8 characters.~
 	END
-	// Checks if a proper array name is given	
+	// Checks if a proper array name is given.	
 	ACTION_IF (~%strrefArray%~ STRING_EQUAL ~!_NULL~) THEN 
 	BEGIN
 		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The correct array name as an argument is missing. The array name !_NULL is forbidden.~
@@ -184,3 +184,57 @@ BEGIN
 	COPY ~./%2daLocation%/%2daFilename%.2da~ ~./%2daLocation%/%2daFilename%.2da~ PRETTY_PRINT_2DA
 
 END // End of "CREATE_READINGSEQUENCE_2DA"
+
+
+
+// Purpose: Adds a conversable item(Such as Lilarcor) into the itemtype.2DA.
+// -------------------------------------------------------------------------
+// Parameters:|
+// ============
+// strref 		-> 	This is a string reference from dialog.tlk that 
+//					references to the text for the button in the item's description windows.
+// itemName 	-> 	This is the filename of the item with which a conversation is possible (Tag is set to Conversable).
+// dialogFile 	-> 	(Optional) The filename of the dialogue file for the item. If not provided, 
+//               	the `itemName` will be used as the dialogue filename.
+DEFINE_DIMORPHIC_FUNCTION ~ADD_CONVERSABLE_ITEM_IN_2DA~
+	INT_VAR
+		strref 		= "-1"
+	STR_VAR
+		itemName 	= "!_NULL"
+		dialogFile	= "!_NULL"
+BEGIN
+	// Checks if the string reference value is not a negative value.
+	ACTION_IF (~%strref%~ < 0) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_CONVERSABLE_ITEM_IN_2DA -> The provided value for the 'strref' parameter, '%strref%', is not a valid non-negative integer. Please ensure you provide a whole number greater than or equal to 0.~
+	END
+	// Check if valid itemName argument is given.
+	ACTION_IF (~%itemName%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The correct argument for itemName is missing. The argument !_NULL is forbidden.~
+	END
+	// Checks if item name has more than 8 characters.
+	ACTION_IF (STRING_LENGTH ~%itemName%~ > 8) THEN
+	BEGIN
+		OUTER_SET numbers = STRING_LENGTH ~%itemName%~
+		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The argument '%itemName%' for itemName is %numbers% characters long. The maximum allowed length for this argument is 8 characters.~
+	END
+	// Checks if dialog file has more than 8 characters.
+	ACTION_IF (STRING_LENGTH ~%dialogFile%~ > 8) THEN
+	BEGIN
+		OUTER_SET numbers = STRING_LENGTH ~%dialogFile%~
+		FAIL ~DEFINE_ACTION_FUNCTION CREATE_READINGSEQUENCE_2DA -> The argument '%dialogFile%' for dialogFile is %numbers% characters long. The maximum allowed length for this argument is 8 characters.~
+	END
+	
+	// --- BUSINESS LOGIC
+	ACTION_IF (~%dialogFile%~ STRING_EQUAL ~!_NULL~) THEN
+	BEGIN
+		// If dialogFile value is not specified, use itemName value as the dialogue file.
+		APPEND ~ITEMDIAL.2DA~ ~%itemName%      %strref%  %itemName%~
+	END ELSE
+	BEGIN
+		// Adds a new row to the bottom of the file with all the needed information.
+		APPEND ~ITEMDIAL.2DA~ ~%itemName%      %strref%  %dialogFile%~
+	END
+
+END // End of "ADD_CONVERSABLE_ITEM_IN_2DA"

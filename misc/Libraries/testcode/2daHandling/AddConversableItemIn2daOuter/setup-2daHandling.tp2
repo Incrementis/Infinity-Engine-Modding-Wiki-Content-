@@ -1,0 +1,40 @@
+BACKUP "weidu_external\2daHandling\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/2daHandling.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing 2daHandling lib"
+
+// ---TEST 1
+// This adds itemA as item name and dialog file.
+LAF ADD_CONVERSABLE_ITEM_IN_2DA
+	INT_VAR
+		strref 		= 25931
+	STR_VAR
+		itemName 	= "itemA"
+END
+
+
+// ---TEST 2
+// This will allow to define an individual dialog file.
+LAF ADD_CONVERSABLE_ITEM_IN_2DA
+	INT_VAR
+		strref 		= 25931
+	STR_VAR
+		itemName 	= "itemB"
+		dialogFile	= "myDialog"
+END
