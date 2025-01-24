@@ -9,7 +9,7 @@ BEGIN
 END
 
 
-OUTER_SPRINT warning @2147483644
+OUTER_SPRINT warning @1073741820
 
 
 // Checks all files
@@ -21,7 +21,7 @@ OUTER_FOR (index = 0; VARIABLE_IS_SET $files(~%index%~); ++index) BEGIN
 	// Calls warning 
 	LAF WARN_EVALUATE_FILE_EXISTANCE 
 		STR_VAR 
-			file 	= EVAL ~%file%~
-			message = EVAL ~%warning%~
+			file 	= ~%file%~
+			message = ~%warning%~
 		END
 END

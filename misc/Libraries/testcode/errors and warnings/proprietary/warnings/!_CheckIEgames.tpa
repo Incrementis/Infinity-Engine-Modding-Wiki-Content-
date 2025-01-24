@@ -4,13 +4,8 @@
 // Creates an array with game shortcuts whose compatibilty with the mod is uncertain
 ACTION_DEFINE_ARRAY games_insecure_compatibility
 BEGIN 
-	~bg2~
-	~tob~
-	~iwd2~
-	~pst~
 	~bg1~
 	~totsc~
-	~iwd1~
 	~how~
 	~totlm~
 	~tutu~
@@ -18,15 +13,10 @@ BEGIN
 	~bgt~
 	~ca~
 	~iwd_in_bg2~
-	~bgee~
-	~bg2ee~
-	~eet~
-	~iwdee~
-	~pstee~
 END
 
 
-OUTER_SPRINT warning @2147483646
+OUTER_SPRINT warning @1073741822
 
 
 // Checks all game shortcuts
@@ -38,7 +28,7 @@ OUTER_FOR (index = 0; VARIABLE_IS_SET $games_insecure_compatibility(~%index%~); 
 	// Calls warning 
 	LAF WARN_EVALUATE_GAME_EXISTANCE 
 		STR_VAR 
-			game 	= EVAL ~%game%~
-			message = EVAL ~%warning%~
+			game 	= ~%game%~
+			message = ~%warning%~
 		END
 END
