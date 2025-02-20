@@ -1,0 +1,46 @@
+BACKUP "weidu_external\gameInfo\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/gameInfo.tph~
+	// CREATING ITEM FILE(for testing patch version)
+	// ----------------------------------------------
+	CREATE ~ITM~ ~Testfile~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing gameInfo lib"
+
+// PATCHING ITEM TESTFILE
+// ----------------------
+COPY_EXISTING ~Testfile.ITM~ override
+
+// ---TEST1
+LPF GET_GAME_IDENTIFIER
+	INT_VAR
+		asGroup = 1
+	RET
+		myIdentifier = identifier
+END
+
+PATCH_PRINT ~Group identifier: %myIdentifier%~
+
+// ---TEST2
+// Default value of asGroup is 0
+LPF GET_GAME_IDENTIFIER
+	RET
+		myIdentifier = identifier
+END
+
+PATCH_PRINT ~Single Identifier: %myIdentifier%~

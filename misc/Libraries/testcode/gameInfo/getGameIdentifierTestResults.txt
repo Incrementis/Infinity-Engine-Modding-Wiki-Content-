@@ -1,0 +1,74 @@
+============
+| GOG Games|
+============
+
+Siege of Dragonspear 2.6.6
+--------------------------
+Group identifier: ee
+
+Single Identifier: sod
+
+
+Baldur's Gate Enhanced Edition 2.6.6
+------------------------------------
+Group identifier: ee
+
+Single Identifier: bgee
+
+
+Baldur's Gate II: Enhanced Edition 2.6.6
+-----------------------------------------
+Group identifier: ee
+
+Single Identifier: bg2ee
+
+
+Icewind Dale: Enhanced Edition 2.6.6
+------------------------------------
+Group identifier: ee
+
+Single Identifier: iwdee
+
+
+Planescape: Torment: Enhanced Edition 3.1.4.0
+---------------------------------------------
+Group identifier: ee
+
+Single Identifier: pstee
+
+
+Baldur's Gate: The Original Saga (gog-20)
+-----------------------------------------
+Group identifier: bg1
+
+Single Identifier: totsc
+
+
+Baldur's Gate 2 Complete (gog-12)
+---------------------------------
+Group identifier: bg2
+
+Single Identifier: tob
+
+
+Icewind Dale Complete
+---------------------
+Group identifier: iwd
+
+Single Identifier: totlm
+
+
+Icewind Dale 2 Complete 2.01
+----------------------------
+FAILURE:
+DEFINE_DIMORPHIC_FUNCTION GET_GAME_IDENTIFIER -> No grouped identifier found. Ensure the game is part of a defined group (e.g., IWD, BG1, BG2). If a single identifier was intended, set asGroup to 0.
+
+Single Identifier: iwd2
+
+
+Planescape: Torment 1.01(A)
+---------------------------
+FAILURE:
+DEFINE_DIMORPHIC_FUNCTION GET_GAME_IDENTIFIER -> No grouped identifier found. Ensure the game is part of a defined group (e.g., IWD, BG1, BG2). If a single identifier was intended, set asGroup to 0.
+
+Single Identifier: pst
