@@ -1,0 +1,39 @@
+BACKUP "weidu_external\gameInfo\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/gameInfo.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing gameInfo lib"
+
+// ---TEST1
+LAF GET_GAME_IDENTIFIER
+	INT_VAR
+		asGroup = 1
+	RET
+		myIdentifier = identifier
+END
+
+PRINT ~Group identifier: %myIdentifier%~
+
+// ---TEST2
+// Default value of asGroup is 0
+LAF GET_GAME_IDENTIFIER
+	RET
+		myIdentifier = identifier
+END
+
+PRINT ~Single Identifier: %myIdentifier%~
