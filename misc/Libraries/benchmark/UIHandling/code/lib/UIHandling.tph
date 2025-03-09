@@ -1,0 +1,341 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+//------------------------------------//
+// Contains self defined UI operations//
+//------------------------------------//
+
+
+// Purpose: Customizes TextScreen(S:TextList*) sequences in IWDEE by setting titles and textarea positions.
+//          Specifically targets IWDEE's UI.MENU, adding SHA-256 markers for unique identification.
+//          Overwrites the "name 'CHAPTER'" menu, potentially conflicting with other mods.
+//          Also addresses the issue where TextScreen(S:TextList*) sequences inherit the last sequence's title.
+// ------------------------------------------------------------------------------------------------------------
+// Parameters:|
+// ============
+// arrayName		->	Array containing sequence information. Each element should be formatted as:
+//              		~<title> <strref of text> <x-coordinate> <y-coordinate> <textarea width> <textarea height>~
+//              		Example: ~Fighter 44 700 218 156 161~
+//              		Refer to ACTION_DEFINE_ARRAY in WeiDU for array details.
+// deactivateChecks	->	The default is 0 for not disabled and 1 for disabled. 
+// 						Disabling improves performance but increases the risk of duplicates (title and strref).
+// -----------------------------------------------------------------------------------------------------------------
+DEFINE_DIMORPHIC_FUNCTION ~IWDEE_SEQUENCE_TEXTPOS_AND_TITLE~
+	INT_VAR
+		deactivateChecks 	= 0
+	STR_VAR
+		arrayName 			= ~!_NULL~
+BEGIN
+	// Checks if a proper array name is given.	
+	ACTION_IF (~%arrayName%~ STRING_EQUAL ~!_NULL~) THEN 
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> The correct array name as an argument is missing. The array name !_NULL is forbidden.~
+	END
+	// Checks if the game is Icewind Dale Enhanced Edition.
+	ACTION_IF NOT(GAME_IS ~iwdee~) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> This function can only be used for Icewind Dale Enhanced Edition.~
+	END
+	
+	// INITIALIZES NEW LINE
+	// --------------------
+	// Windows
+	ACTION_IF (~%WEIDU_OS%~ STRING_EQUAL ~win32~) THEN
+	BEGIN
+		OUTER_SPRINT NL ~%WNL%~
+	END
+	// macOS
+	ACTION_IF (~%WEIDU_OS%~ STRING_EQUAL ~osx~) THEN
+	BEGIN
+		OUTER_SPRINT NL ~%MNL%~
+	END
+	// Linux
+	ACTION_IF (~%WEIDU_OS%~ STRING_EQUAL ~unix~) THEN
+	BEGIN
+		OUTER_SPRINT NL ~%LNL%~
+	END
+
+	// INITIALIZES M_!_sqfn_!_5a8c17.dat (function definition file)
+	// ------------------------------------------------------------
+	// <Function name> <filename containing function>
+	// <File where function is called>
+	// <headers (space-separated)>
+	<<<<<<<<./weidu_external/workspace/data/temp/M_!_sqfn_!_7d6ded.dat
+bang_setSequenceTextPosition M_!_sqfn.lua 
+UI.MENU
+strref x y width height>>>>>>>>
+
+	// INITIALIZES M_!_init.lua (Lua variable initialization)
+	// ------------------------------------------------------
+	// Creates file if it doesn't exist.
+	ACTION_IF NOT(FILE_EXISTS_IN_GAME ~M_!_init.lua~) THEN
+	BEGIN
+		<<<<<<<<./weidu_external/workspace/M_!_init.lua
+bang_sequenceTitles = {}
+--(SHA-256):!_c6f50d
+bang_sequenceScrollText = {}
+--(SHA-256):!_4464af>>>>>>>>
+
+		COPY ~./weidu_external/workspace/M_!_init.lua~ override
+	END
+	
+	// INITIALIZES M_!_sqfn.lua (Lua functions for sequences)
+	// ------------------------------------------------------
+	// Creates file if it doesn't exist.
+	ACTION_IF NOT(FILE_EXISTS_IN_GAME ~M_!_sqfn.lua~) THEN
+	BEGIN
+		<<<<<<<<./weidu_external/workspace/M_!_sqfn.lua
+--Purpose: Retrieves sequence title for TextScreen(S:TextList*).
+function bang_getSequenceTitle()
+	local text = 0
+	for text=0,#bang_sequenceScrollText,1
+	do
+		if(bang_sequenceScrollText[text] == text_CHAPTERSCROLL) then
+			text_CHAPTERSCROLL_title = bang_sequenceTitles[text]
+			return text_CHAPTERSCROLL_title
+		end
+	end
+end--(SHA-256):!_8719de
+
+
+--Purpose: Dynamically sets sequence text position.
+function bang_setSequenceTextPosition()
+end--(SHA-256):!_7d6ded>>>>>>>>
+
+		COPY ~./weidu_external/workspace/M_!_sqfn.lua~ override
+	END
+	
+	// INITIALIZES !_700d99.dat (modified UI.MENU snippet)
+	// ---------------------------------------------------
+	// Note that the following string combinations were used to generate the SHA-256 markers:
+	// * name 'CHAPTER'
+	// * name 'CHAPTER' <name>
+	// * name 'CHAPTER' <name> <whole body> 
+	// (e.g. name 'CHAPTER' when opened) because "name 'CHAPTER'" is unique in the ui.menu file.
+	// It was selected from here and then copied and pasted into a SHA generator.
+	<<<<<<<<./weidu_external/workspace/data/!_uiMenu_!_700d99.dat
+
+menu
+{
+	name 'CHAPTER'
+	align center center
+	ignoreEsc
+	onOpen
+	"
+        bang_setSequenceTextPosition() 
+	"--(SHA-256):!_ece7ca
+    onClose
+    "
+        text_CHAPTERSCROLL_title = ''
+    "--(SHA-256):!_902a9b
+	label
+	{--(SHA-256):!_fc8cc2
+		area 0 0 1024 768
+		mosaic lua "chapterBackground"
+	}--(SHA-256):!_fc8cc2
+	label
+	{--(SHA-256):!_62676a
+		area 168 24 702 84
+		text lua "getChapterText()"
+		text style "title"
+	}--(SHA-256):!_62676a
+    label
+    {--(SHA-256):!_1f99de
+        area 168 24 702 84
+        text lua "bang_getSequenceTitle()"
+        text style "title"
+    }--(SHA-256):!_1f99de
+	text
+	{--(SHA-256):!_74936d
+		name "text_CHAPTERSCROLL_item"
+		area 576 236 316 322
+        text lua "text_CHAPTERSCROLL"
+		text style normal
+		scrollbar 'GUISCRC'
+		scrollbar func 'UpdateChapterScroll'
+		scrollbar hide lua 'text_CHAPTERSCROLL_auto == 1'
+		action
+		"
+			text_CHAPTERSCROLL_auto = 0
+		"
+	}--(SHA-256):!_74936d
+	button
+	{--(SHA-256):!_e5f095
+		area 518 688 234 44
+		bam GUIBUTMT
+		sequenceonce lua "getRandomButtonSequence('GUIBUTMT')"
+		text "DONE_BUTTON"
+		text style "button"
+		clickable lua "chapterScreen:IsDoneButtonClickable()"
+		action
+		"
+			chapterScreen:OnDoneButtonClick()
+		"
+	}--(SHA-256):!_e5f095
+	button
+	{--(SHA-256):!_fbdcbc
+		area 274 688 234 44
+		bam GUIBUTMT
+		sequenceonce lua "getRandomButtonSequence('GUIBUTMT')"
+		text "REPLAY_BUTTON"
+		text style "button"
+		--clickable lua "chapterScreen:IsReplayButtonClickable()"
+		action
+		"
+			chapterScreen:OnReplayButtonClick()
+		"
+	}--(SHA-256):!_fbdcbc
+}--(SHA-256):!_700d99
+>>>>>>>>
+	
+	// INITIALIZES VARIABLES
+	// ---------------------
+	OUTER_SET titleIndex 	= 0
+	OUTER_SET textIndex		= 0
+	COPY_EXISTING ~M_!_init.lua~ ~override~
+		COUNT_REGEXP_INSTANCES CASE_SENSITIVE EXACT_MATCH ~bang_sequenceTitles~ titleIndex
+		// Adjusts title index if titles already exist(Prevents negative index value).
+		PATCH_IF (titleIndex > 0) THEN
+		BEGIN
+			SET titleIndex = titleIndex - 1 
+		END
+	BUT_ONLY
+
+	COPY_EXISTING ~M_!_sqfn.lua~ ~override~
+		COUNT_REGEXP_INSTANCES CASE_SENSITIVE EXACT_MATCH ~bang_sequenceScrollText~ textIndex
+		// // Adjusts text index if texts already exist(Prevents division by 0)
+		PATCH_IF (textIndex > 0) THEN
+		BEGIN
+			SET textIndex = (textIndex/2) - 1
+		END
+	BUT_ONLY
+
+	// READS ARRAY AND WRITES INTO TEMPORARY M_!_sqfn_!_7d6ded.dat
+	// -----------------------------------------------------------
+	COPY ~./weidu_external/workspace/data/temp/M_!_sqfn_!_7d6ded.dat~ ~./weidu_external/workspace/data/temp/M_!_sqfn_!_7d6ded.dat~
+		FOR (arrayIndex = 0; VARIABLE_IS_SET $~%arrayName%~(~%arrayIndex%~) ; ++arrayIndex)
+		BEGIN
+			// Gets array elements and 2DA attributes to be used for insertion into a structured 2DA log file.
+			SPRINT row2DA $~%arrayName%~(~%arrayIndex%~)
+			COUNT_2DA_COLS numCols
+			COUNT_2DA_ROWS ~%numCols%~ numRows
+			// Appends the array element as a new row to the 2DA file.
+			INSERT_2DA_ROW ~%numRows%~ ~%numCols%~ ~%row2DA%~		
+		END	
+		// Formats the 2DA file for readability.
+		PRETTY_PRINT_2DA
+		
+		// READS TEMPORARY M_!_sqfn_!_7d6ded.dat AND WRITES INTO ARRAY
+		// -----------------------------------------------------------
+		// The final number of columns in the loop seems to be wrong. To be on the safe side, both are used/called again.
+		COUNT_2DA_COLS numCols
+		COUNT_2DA_ROWS ~%numCols%~ numRows		
+		//Loads 2DA content into memory for efficient access.
+		READ_2DA_ENTRIES_NOW ~sequencetypes~ ~%numCols%~
+				
+		// SANITY CHECKS - IDENTIFICATION OF DUPLICATES
+		// --------------------------------------------
+		PATCH_IF (~%deactivateChecks%~ == 0) THEN
+		BEGIN
+		FOR (sanityIndex = 0; VARIABLE_IS_SET $~%arrayName%~(~%sanityIndex%~); ++sanityIndex)
+			BEGIN
+				// Retrieves title and strref from loaded 2DA array.
+				READ_2DA_ENTRY_FORMER sequencetypes sanityIndex 0 title
+				READ_2DA_ENTRY_FORMER sequencetypes sanityIndex 1 strref
+				// Checks for duplicate titles in M_!_init.lua.
+				PATCH_IF RESOURCE_CONTAINS ~M_!_init.lua~ ~"%title%"~ THEN
+				BEGIN
+					PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate title found. The title '%title%' already exists.~
+				END
+				// Checks for duplicate strrefs in M_!_sqfn.lua.
+				PATCH_IF RESOURCE_CONTAINS ~M_!_sqfn.lua~ ~Infinity_FetchString(%strref%)"~ THEN
+				BEGIN
+					PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate strref found. The strref '%strref%' already exists.~
+				END
+				// Checks for duplicates within the input array.
+				FOR (indexOther = (sanityIndex + 1); indexOther < numRows; ++indexOther) 
+				BEGIN
+					READ_2DA_ENTRY_FORMER sequencetypes indexOther 0 titleOther
+					READ_2DA_ENTRY_FORMER sequencetypes indexOther 1 strrefOther
+					// Compares titles for duplicates.
+					PATCH_IF (~%title%~ STRING_EQUAL ~%titleOther%~) THEN
+					BEGIN
+						PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate title found. The title '%title%' already exists more than once in array %arrayName%.~
+					END
+					// Compares strrefs for duplicates.
+					PATCH_IF (~%strref%~ STRING_EQUAL ~%strrefOther%~ ) THEN
+					BEGIN
+						PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate strref found. The strref '%strref%' already exists more than once in array %arrayName%.~
+					END
+				END // End of nested "FOR" loop
+			END // End of first "FOR"
+		END // End of "PATCH_IF"
+	// Cleanup
+	DELETE ~./weidu_external/workspace/data/temp/M_!_sqfn_!_7d6ded.dat~
+	
+	// WRITES TITLE-NAMES INTO M_!_init.lua
+	// ------------------------------------
+	COPY_EXISTING ~M_!_init.lua~ override
+		FOR (rowIndex = 0; rowIndex < numRows; ++rowIndex) 
+		BEGIN
+			// Gets title from loaded 2DA array.
+			READ_2DA_ENTRY_FORMER sequencetypes rowIndex 0 title
+			// Searches for the unique marker, eliminating the need for complicated and risky regular expressions.
+			REPLACE_EVALUATE CASE_SENSITIVE ~--(SHA-256):!_c6f50d~
+			BEGIN
+				SPRINT LUA_arrayTitle ~bang_sequenceTitles[%titleIndex%] = "%title%" %NL%~
+				SPRINT LUA_code EVAL ~%LUA_arrayTitle%~
+			END ~%LUA_code%--(SHA-256):!_c6f50d~
+			
+			SET titleIndex = titleIndex+1
+		END // End of "FOR" loop
+	BUT_ONLY
+	
+	// WRITES TEXTAREA SIZE AND COORDINATES (IDEE) INTO M_!_sqfn.lua
+	// -------------------------------------------------------------
+	COPY_EXISTING ~M_!_sqfn.lua~ ~override~
+		FOR (rowIndex = 0; rowIndex < numRows; ++rowIndex) 
+		BEGIN
+				// Retrieves sequence parameters from loaded 2DA array except the title.
+				READ_2DA_ENTRY_FORMER sequencetypes rowIndex 1 strref
+				READ_2DA_ENTRY_FORMER sequencetypes rowIndex 2 x
+				READ_2DA_ENTRY_FORMER sequencetypes rowIndex 3 y
+				READ_2DA_ENTRY_FORMER sequencetypes rowIndex 4 width
+				READ_2DA_ENTRY_FORMER sequencetypes rowIndex 5 height
+		
+			REPLACE_EVALUATE CASE_SENSITIVE ~end--(SHA-256):!_7d6ded~
+			BEGIN			
+				SPRINT LUA_array  	~%TAB%bang_sequenceScrollText[%textIndex%] = Infinity_FetchString(%strref%) %NL%~
+				SPRINT LUA_if  		~%TAB%if(text_CHAPTERSCROLL == bang_sequenceScrollText[%textIndex%]) then %NL%~
+				SPRINT LUA_area  	~%TAB%%TAB%Infinity_SetArea('text_CHAPTERSCROLL_item', %x%, %y%, %width%, %height%) %NL%~
+				SPRINT LUA_end  	~%TAB%end%NL%~
+				SPRINT LUA_all		~%LUA_array%~^~%LUA_if%~^~%LUA_area%~^~%LUA_end%~				
+				SPRINT LUA_code EVAL ~%LUA_all%~
+			END ~%LUA_code%end--(SHA-256):!_7d6ded~
+			
+			SET textIndex = textIndex+1
+		END // End of "FOR" loop
+	BUT_ONLY		
+
+	// READS CONTENT OF !_uiMenu_!_700d99.dat
+	// --------------------------------------
+	// Checks if the modified UI.MENU snippet exists.
+	ACTION_IF NOT (RESOURCE_CONTAINS ~ui.menu~ ~}--(SHA-256):!_700d99~) THEN
+	BEGIN
+		COPY_EXISTING ~./weidu_external/workspace/data/!_uiMenu_!_700d99.dat~ ~/weidu_external/workspace/data/!_uiMenu_!_700d99.dat~
+			REPLACE_EVALUATE ~menu[ %WNL%%TAB%]*{[ %WNL%%TAB%]*name 'CHAPTER'[ %WNL%%TAB%a-zA-Z"{0-9}()_'=:!-]*~
+			BEGIN			
+				SPRINT UImenuCHAPTER ~%MATCH0%~
+			END ~%UImenuCHAPTER%~
+		BUT_ONLY
+		// Cleanup
+		DELETE ~./weidu_external/workspace/data/!_uiMenu_!_700d99.dat~
+		
+		// REPLACES CONTENT OF !_uiMenu_!_700d99.dat INTO UI.MENU
+		// ------------------------------------------------------
+		COPY_EXISTING ~ui.menu~ override
+			REPLACE_EVALUATE ~menu[ %WNL%%TAB%]*{[ %WNL%%TAB%]*name 'CHAPTER'[ %WNL%%TAB%a-zA-Z"{0-9}()_'=:!-]*~
+			BEGIN			
+				//PATCH_PRINT ~%MATCH0%~
+			END ~%UImenuCHAPTER%~
+		BUT_ONLY
+	END // End of "ACTION_IF"
+END // End of "IWDEE_SEQUENCE_TEXTPOS_AND_TITLE"

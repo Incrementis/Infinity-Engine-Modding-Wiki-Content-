@@ -1,0 +1,33 @@
+deactivateChecks = 0
+--------------------
+10:		0.00sec
+100:	0.27sec
+1k:		23.18sec
+2k:		2min 9sec
+3k:		3min 6sec
+4k:		Stopped the test at 12min 10sec 
+5k:		NOT TESTED
+6k:		NOT TESTED
+7k:		NOT TESTED
+8k:		NOT TESTED
+9k:		NOT TESTED
+10k:	NOT TESTED
+100k	NOT TESTED
+1MM:	NOT TESTED
+
+deactivateChecks = 1
+--------------------
+10:		0.00sec
+100:	0.00sec
+1k:		6.77sec
+2k:		37sec
+3k:		2min 4sec
+4k:		9min 48sec
+5k:		NOT TESTED
+6k:		NOT TESTED
+7k:		NOT TESTED
+8k:		NOT TESTED
+9k:		NOT TESTED
+10k:	NOT TESTED
+100k	NOT TESTED
+1MM:	NOT TESTED

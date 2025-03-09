@@ -1,0 +1,83 @@
+BACKUP "weidu_external\UiManipulation\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/UIHandling.tph~
+	INCLUDE ~%MOD_FOLDER%/10.tph~
+	//INCLUDE ~%MOD_FOLDER%/100.tph~
+	//INCLUDE ~%MOD_FOLDER%/1000.tph~
+	//INCLUDE ~%MOD_FOLDER%/2000.tph~
+	//INCLUDE ~%MOD_FOLDER%/3000.tph~
+	//INCLUDE ~%MOD_FOLDER%/4000.tph~
+	//INCLUDE ~%MOD_FOLDER%/5000.tph~
+	//INCLUDE ~%MOD_FOLDER%/6000.tph~
+	//INCLUDE ~%MOD_FOLDER%/7000.tph~
+	//INCLUDE ~%MOD_FOLDER%/8000.tph~
+	//INCLUDE ~%MOD_FOLDER%/9000.tph~
+	//INCLUDE ~%MOD_FOLDER%/10000.tph~
+	//INCLUDE ~%MOD_FOLDER%/100000.tph~ //(Not tested)
+	//INCLUDE ~%MOD_FOLDER%/1000000.tph~//(Not tested)
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing UI Manipulation"
+ACTION_TIME ~IWDEE_SEQUENCE_TEXTPOS_AND_TITLE-Benchmark~ 
+	BEGIN
+	// 10 Elements -> testArray1
+	// -----------
+	// 100 Elements -> testArray2
+	// ------------
+	// 1000 Elements -> testArray3
+	// -------------
+	// 2000 Elements -> testArray4
+	// -------------
+	// 3000 Elements -> testArray5
+	// -------------
+	// 4000 Elements -> testArray6
+	// -------------
+	// 5000 Elements -> testArray7
+	// -------------
+	// 6000 Elements -> testArray8
+	// -------------
+	// 7000 Elements -> testArray9
+	// -------------
+	// 8000 Elements -> testArray10
+	// -------------
+	// 9000 Elements -> testArray11
+	// -------------
+	// 10000 Elements -> testArray12 (Not tested)
+	// --------------
+	// 100000 Elements -> testArray13 (Not tested)
+	// ---------------
+	// 1000000 Elements -> testArray14 (Not tested)
+	// ----------------
+	LAF IWDEE_SEQUENCE_TEXTPOS_AND_TITLE
+		INT_VAR
+			deactivateChecks = 1
+		STR_VAR
+			arrayName = "testArray1"
+			//arrayName = "testArray2"
+			//arrayName = "testArray3"
+			//arrayName = "testArray4"
+			//arrayName = "testArray5"
+			//arrayName = "testArray6"
+			//arrayName = "testArray7"
+			//arrayName = "testArray8"
+			//arrayName = "testArray9"
+			//arrayName = "testArray10"
+			//arrayName = "testArray11"
+			//arrayName = "testArray12"
+			//arrayName = "testArray13"
+			//arrayName = "testArray14"
+	END
+END

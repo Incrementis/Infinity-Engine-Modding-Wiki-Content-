@@ -1,0 +1,66 @@
+BACKUP "weidu_external\UiManipulation\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/UIHandling.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing UI Manipulation"
+
+// For C:Eval('TextScreen(S:TextList*)') tests.
+COPY ~%MOD_FOLDER%/2da/~ override
+
+
+ACTION_DEFINE_ARRAY testArray1
+BEGIN
+	~Fighter 	44 		700 218 156 161~
+	~Thief 		45 		600 217 146 151~
+	~Cleric 	792 	500 216 136 141~
+	~Paladin 	2589 	400 215 126 131~
+	~Wizard 	48 		300 214 116 121~
+	//~Wizard 	48 		300 214 116 121~ // Enable this line to test duplicate detection for titles in Input array.
+	//~Warrior 	44 		300 214 116 121~ // Enable this line to test duplicate detection for strrefs in Input array.
+END
+
+LAF IWDEE_SEQUENCE_TEXTPOS_AND_TITLE 
+	STR_VAR
+		arrayName = "testArray1"
+END
+
+
+/*
+// Enabling the function call tests duplicate detection in LUA file.
+// -----------------------------------------------------------------
+LAF IWDEE_SEQUENCE_TEXTPOS_AND_TITLE 
+	STR_VAR
+		arrayName = "testArray1"
+END
+*/
+
+
+/*
+// Enabling the function call checks whether appending new values to LUA works
+// ---------------------------------------------------------------------------
+ACTION_DEFINE_ARRAY testArray2
+BEGIN
+	~Slime 		800 700 218 156 161~
+	~Goblin 	801 600 217 146 151~
+END
+
+LAF IWDEE_SEQUENCE_TEXTPOS_AND_TITLE 
+	STR_VAR
+		arrayName = "testArray2"
+END
+*/
