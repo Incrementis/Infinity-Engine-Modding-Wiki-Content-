@@ -8,17 +8,21 @@
 //          Specifically targets IWDEE's UI.MENU, adding SHA-256 markers for unique identification.
 //          Overwrites the "name 'CHAPTER'" menu, potentially conflicting with other mods.
 //          Also addresses the issue where TextScreen(S:TextList*) sequences inherit the last sequence's title.
-// ---------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------
 // Parameters:|
 // ============
-// arrayName -> Array containing sequence information. Each element should be formatted as:
-//              ~<title> <strref of text> <x-coordinate> <y-coordinate> <textarea width> <textarea height>~
-//              Example: ~Fighter 44 700 218 156 161~
-//              Refer to ACTION_DEFINE_ARRAY in WeiDU for array details.
-// ---------------------------------------------------------------------------------------------------------------
+// arrayName		->	Array containing sequence information. Each element should be formatted as:
+//              		~<title> <strref of text> <x-coordinate> <y-coordinate> <textarea width> <textarea height>~
+//              		Example: ~Fighter 44 700 218 156 161~
+//              		Refer to ACTION_DEFINE_ARRAY in WeiDU for array details.
+// deactivateChecks	->	The default is 0 for not disabled and 1 for disabled. 
+// 						Disabling improves performance but increases the risk of duplicates (title and strref).
+// -----------------------------------------------------------------------------------------------------------------
 DEFINE_DIMORPHIC_FUNCTION ~IWDEE_SEQUENCE_TEXTPOS_AND_TITLE~
+	INT_VAR
+		deactivateChecks 	= 0
 	STR_VAR
-		arrayName = ~!_NULL~
+		arrayName 			= ~!_NULL~
 BEGIN
 	// Checks if a proper array name is given.	
 	ACTION_IF (~%arrayName%~ STRING_EQUAL ~!_NULL~) THEN 
@@ -105,7 +109,7 @@ end--(SHA-256):!_7d6ded>>>>>>>>
 	// * name 'CHAPTER'
 	// * name 'CHAPTER' <name>
 	// * name 'CHAPTER' <name> <whole body> 
-	// (e.g. name 'CHAPTER' when opened) because "name 'CHAPTER'" is unique in the ui.menu file.
+	// (e.g. name 'CHAPTER' onOpen) because "name 'CHAPTER'" is unique in the ui.menu file.
 	// It was selected from here and then copied and pasted into a SHA generator.
 	<<<<<<<<./weidu_external/workspace/data/!_uiMenu_!_700d99.dat
 
@@ -197,7 +201,7 @@ menu
 
 	COPY_EXISTING ~M_!_sqfn.lua~ ~override~
 		COUNT_REGEXP_INSTANCES CASE_SENSITIVE EXACT_MATCH ~bang_sequenceScrollText~ textIndex
-		// // Adjusts text index if texts already exist(Prevents division by 0)
+		// Adjusts text index if texts already exist(Prevents division by 0)
 		PATCH_IF (textIndex > 0) THEN
 		BEGIN
 			SET textIndex = (textIndex/2) - 1
@@ -207,16 +211,19 @@ menu
 	// READS ARRAY AND WRITES INTO TEMPORARY M_!_sqfn_!_7d6ded.dat
 	// -----------------------------------------------------------
 	COPY ~./weidu_external/workspace/data/temp/M_!_sqfn_!_7d6ded.dat~ ~./weidu_external/workspace/data/temp/M_!_sqfn_!_7d6ded.dat~
+		COUNT_2DA_COLS numCols
+		COUNT_2DA_ROWS ~%numCols%~ numRows
+		SPRINT collectedRows ~~
+		// Gets all array elements into one string.
 		FOR (arrayIndex = 0; VARIABLE_IS_SET $~%arrayName%~(~%arrayIndex%~) ; ++arrayIndex)
 		BEGIN
-			// Gets array elements and 2DA attributes to be used for insertion into a structured 2DA log file.
+			// Gets array elements and 2DA attributes to be used for insertion into a structured 2DA temp data file.
 			SPRINT row2DA $~%arrayName%~(~%arrayIndex%~)
-			COUNT_2DA_COLS numCols
-			COUNT_2DA_ROWS ~%numCols%~ numRows
-			// Appends the array element as a new row to the 2DA file.
-			INSERT_2DA_ROW ~%numRows%~ ~%numCols%~ ~%row2DA%~		
-		END	
-		// Formats the 2DA file for readability.
+			SPRINT collectedRows  ~%collectedRows% %row2DA%%NL%~
+		END
+		// Appends the array element as a new row to the 2DA stuctured dat file.
+		INSERT_2DA_ROW ~%numRows%~ ~%numCols%~ ~%collectedRows%~	
+		// Formats the 2DA structured dat file for readability.
 		PRETTY_PRINT_2DA
 		
 		// READS TEMPORARY M_!_sqfn_!_7d6ded.dat AND WRITES INTO ARRAY
@@ -224,43 +231,46 @@ menu
 		// The final number of columns in the loop seems to be wrong. To be on the safe side, both are used/called again.
 		COUNT_2DA_COLS numCols
 		COUNT_2DA_ROWS ~%numCols%~ numRows		
-		//Loads 2DA content into memory for efficient access.
+		// Loads 2DA content into memory for efficient access.
 		READ_2DA_ENTRIES_NOW ~sequencetypes~ ~%numCols%~
 				
 		// SANITY CHECKS - IDENTIFICATION OF DUPLICATES
 		// --------------------------------------------
-		FOR (sanityIndex = 0; VARIABLE_IS_SET $~%arrayName%~(~%sanityIndex%~) ; ++sanityIndex)
+		PATCH_IF (~%deactivateChecks%~ == 0) THEN
 		BEGIN
-			// Retrieves title and strref from loaded 2DA array.
-			READ_2DA_ENTRY_FORMER sequencetypes sanityIndex 0 title
-			READ_2DA_ENTRY_FORMER sequencetypes sanityIndex 1 strref
-			// Checks for duplicate titles in M_!_init.lua.
-			PATCH_IF RESOURCE_CONTAINS ~M_!_init.lua~ ~"%title%"~ THEN
+			FOR (sanityIndex = 0; VARIABLE_IS_SET $~%arrayName%~(~%sanityIndex%~); ++sanityIndex)
 			BEGIN
-				PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate title found. The title '%title%' already exists.~
-			END
-			// Checks for duplicate strrefs in M_!_sqfn.lua.
-			PATCH_IF RESOURCE_CONTAINS ~M_!_sqfn.lua~ ~Infinity_FetchString(%strref%)"~ THEN
-			BEGIN
-				PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate strref found. The strref '%strref%' already exists.~
-			END
-			// Checks for duplicates within the input array.
-			FOR (indexOther = (sanityIndex + 1); indexOther < numRows; ++indexOther) 
-			BEGIN
-				READ_2DA_ENTRY_FORMER sequencetypes indexOther 0 titleOther
-				READ_2DA_ENTRY_FORMER sequencetypes indexOther 1 strrefOther
-				// Compares titles for duplicates.
-				PATCH_IF (~%title%~ STRING_EQUAL ~%titleOther%~) THEN
+				// Retrieves title and strref from loaded 2DA array.
+				READ_2DA_ENTRY_FORMER sequencetypes sanityIndex 0 title
+				READ_2DA_ENTRY_FORMER sequencetypes sanityIndex 1 strref
+				// Checks for duplicate titles in M_!_init.lua.
+				PATCH_IF RESOURCE_CONTAINS ~M_!_init.lua~ ~"%title%"~ THEN
 				BEGIN
-					PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate title found. The title '%title%' already exists more than once in array %arrayName%.~
+					PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate title found. The title '%title%' already exists.~
 				END
-				// Compares strrefs for duplicates.
-				PATCH_IF (~%strref%~ STRING_EQUAL ~%strrefOther%~ ) THEN
+				// Checks for duplicate strrefs in M_!_sqfn.lua.
+				PATCH_IF RESOURCE_CONTAINS ~M_!_sqfn.lua~ ~Infinity_FetchString(%strref%)~ THEN
 				BEGIN
-					PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate strref found. The strref '%strref%' already exists more than once in array %arrayName%.~
+					PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate strref found. The strref '%strref%' already exists.~
 				END
-			END // End of nested "FOR" loop
-		END // END of first "FOR"
+				// Checks for duplicates within the input array.
+				FOR (indexOther = (sanityIndex + 1); indexOther < numRows; ++indexOther) 
+				BEGIN
+					READ_2DA_ENTRY_FORMER sequencetypes indexOther 0 titleOther
+					READ_2DA_ENTRY_FORMER sequencetypes indexOther 1 strrefOther
+					// Compares titles for duplicates.
+					PATCH_IF (~%title%~ STRING_EQUAL ~%titleOther%~) THEN
+					BEGIN
+						PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate title found. The title '%title%' already exists more than once in array %arrayName%.~
+					END
+					// Compares strrefs for duplicates.
+					PATCH_IF (~%strref%~ == ~%strrefOther%~ ) THEN
+					BEGIN
+						PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate strref found. The strref '%strref%' already exists more than once in array %arrayName%.~
+					END
+				END // End of nested "FOR" loop
+			END // End of first "FOR"
+		END // End of "PATCH_IF"
 	// Cleanup
 	DELETE ~./weidu_external/workspace/data/temp/M_!_sqfn_!_7d6ded.dat~
 	

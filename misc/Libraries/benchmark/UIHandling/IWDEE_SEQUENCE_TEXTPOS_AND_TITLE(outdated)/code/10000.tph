@@ -1,6 +1,6 @@
 // 10000 Elements
 // --------------
-ACTION_DEFINE_ARRAY testArray4
+ACTION_DEFINE_ARRAY testArray12
 BEGIN
 	~title0 0 500 500 500 500~
 	~title1 1 500 500 500 500~
