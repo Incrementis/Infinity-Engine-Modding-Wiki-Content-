@@ -253,6 +253,7 @@ menu
 				BEGIN
 					PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate strref found. The strref '%strref%' already exists.~
 				END
+				/* // SHOULD BE DONE BEFOREHAND OUTSIDE OF INSTALLATION(e.g. with "Excel" or "Libre Office Calc")
 				// Checks for duplicates within the input array.
 				FOR (indexOther = (sanityIndex + 1); indexOther < numRows; ++indexOther) 
 				BEGIN
@@ -268,7 +269,7 @@ menu
 					BEGIN
 						PATCH_FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> Duplicate strref found. The strref '%strref%' already exists more than once in array %arrayName%.~
 					END
-				END // End of nested "FOR" loop
+				END // End of nested "FOR" loop*/
 			END // End of first "FOR"
 		END // End of "PATCH_IF"
 	// Cleanup
@@ -292,7 +293,7 @@ menu
 		END // End of "FOR" loop
 	BUT_ONLY
 	
-	// WRITES TEXTAREA SIZE AND COORDINATES (IDEE) INTO M_!_sqfn.lua
+	// WRITES TEXTAREA SIZE AND COORDINATES (IWDEE) INTO M_!_sqfn.lua
 	// -------------------------------------------------------------
 	COPY_EXISTING ~M_!_sqfn.lua~ ~override~
 		FOR (rowIndex = 0; rowIndex < numRows; ++rowIndex) 
