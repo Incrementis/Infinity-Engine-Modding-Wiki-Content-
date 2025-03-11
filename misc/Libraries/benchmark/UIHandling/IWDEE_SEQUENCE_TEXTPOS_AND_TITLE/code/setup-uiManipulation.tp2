@@ -1,0 +1,65 @@
+BACKUP "weidu_external\UiManipulation\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+//AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/UIHandling.tph~
+
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing UI Manipulation"
+
+// For C:Eval('TextScreen(S:TextList*)') tests.
+COPY ~%MOD_FOLDER%/2da/~ override
+	INCLUDE ~%MOD_FOLDER%/10.tph~		// 10 Elements -> testArray1
+	//INCLUDE ~%MOD_FOLDER%/100.tph~	// 100 Elements -> testArray2
+	//INCLUDE ~%MOD_FOLDER%/1000.tph~	// 1000 Elements -> testArray3
+	//INCLUDE ~%MOD_FOLDER%/2000.tph~	// 2000 Elements -> testArray4
+	//INCLUDE ~%MOD_FOLDER%/3000.tph~	// 3000 Elements -> testArray5
+	//INCLUDE ~%MOD_FOLDER%/4000.tph~	// 4000 Elements -> testArray6
+	//INCLUDE ~%MOD_FOLDER%/5000.tph~	// 5000 Elements -> testArray7
+	//INCLUDE ~%MOD_FOLDER%/6000.tph~	// 6000 Elements -> testArray8
+	//INCLUDE ~%MOD_FOLDER%/7000.tph~	// 7000 Elements -> testArray9
+	//INCLUDE ~%MOD_FOLDER%/8000.tph~	// 8000 Elements -> testArray10
+	//INCLUDE ~%MOD_FOLDER%/9000.tph~	// 9000 Elements -> testArray11
+	//INCLUDE ~%MOD_FOLDER%/10000.tph~	// 10000 Elements -> testArray12
+	//INCLUDE ~%MOD_FOLDER%/20000.tph~	// 20000 Elements -> testArray13
+	//INCLUDE ~%MOD_FOLDER%/30000.tph~	// 30000 Elements -> testArray14
+	//INCLUDE ~%MOD_FOLDER%/40000.tph~	// 40000 Elements -> testArray15
+	//INCLUDE ~%MOD_FOLDER%/50000.tph~	// 50000 Elements -> testArray16
+	//INCLUDE ~%MOD_FOLDER%/100000.tph~ //(Not tested)
+	//INCLUDE ~%MOD_FOLDER%/1000000.tph~//(Not tested)
+
+ACTION_TIME ~IWDEE_SEQUENCE_TEXTPOS_AND_TITLE-Benchmark~ 
+	BEGIN
+
+	LAF IWDEE_SEQUENCE_TEXTPOS_AND_TITLE
+		INT_VAR
+			deactivateChecks = 0
+		STR_VAR
+			arrayName = "testArray1"
+			//arrayName = "testArray2"
+			//arrayName = "testArray3"
+			//arrayName = "testArray4"
+			//arrayName = "testArray5"
+			//arrayName = "testArray6"
+			//arrayName = "testArray7"
+			//arrayName = "testArray8"
+			//arrayName = "testArray9"
+			//arrayName = "testArray10"
+			//arrayName = "testArray11"
+			//arrayName = "testArray12"
+			//arrayName = "testArray13"
+			//arrayName = "testArray14"
+	END
+END

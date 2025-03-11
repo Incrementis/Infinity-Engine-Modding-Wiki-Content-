@@ -30,8 +30,8 @@ BEGIN
 	~Cleric 	792 	500 216 136 141~
 	~Paladin 	2589 	400 215 126 131~
 	~Wizard 	48 		300 214 116 121~
-	//~Wizard 	48 		300 214 116 121~ // Detection for titles in input array not supported anymore.
-	//~Warrior 	44 		300 214 116 121~ // Detection for strrefs in input array not supported anymore.
+	//~Wizard 	48 		300 214 116 121~ // Enable this line to test duplicate detection for titles in Input array.
+	//~Warrior 	44 		300 214 116 121~ // Enable this line to test duplicate detection for strrefs in Input array.
 END
 
 LAF IWDEE_SEQUENCE_TEXTPOS_AND_TITLE 

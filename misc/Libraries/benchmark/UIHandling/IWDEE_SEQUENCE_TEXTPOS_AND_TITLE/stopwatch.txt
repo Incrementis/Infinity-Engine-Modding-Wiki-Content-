@@ -1,0 +1,41 @@
+deactivateChecks = 0
+--------------------
+10:		0 sec
+100:	0 sec
+1k:		1 sec
+2k:		1.9 sec
+3k:		5.5 sec
+4k:		9.38 sec
+5k:		13.92 sec
+6k:		20 sec
+7k:		26.3 sec
+8k:		34.3 sec
+9k:		42.8 sec
+10k:	51.44 sec
+20k:	2min 11.8sec
+30k:	5min 12sec
+40k:	NOT TESTED
+50k:	NOT TESTED
+100k:	NOT TESTED	
+1MM:	NOT TESTED
+
+deactivateChecks = 1
+--------------------
+10:		0 sec
+100:	0 sec	
+1k:		0.5sec
+2k:		1.45 sec
+3k:		4.9 sec		
+4k:		8.4 sec
+5k:		12.5sec
+6k:		18 sec
+7k:		24.5 sec
+8k:		31 sec
+9k:		42 sec
+10k:	48.4 sec	
+20k:	2min 9sec
+30k:	5min 15sec
+40k:	NOT TESTED
+50k:	NOT TESTED	
+100k	NOT TESTED
+1MM:	NOT TESTED
