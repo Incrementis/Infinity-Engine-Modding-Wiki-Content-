@@ -16,8 +16,8 @@
 //              		Example: ~Fighter 44 700 218 156 161~
 //              		Refer to ACTION_DEFINE_ARRAY in WeiDU for array details.
 // deactivateChecks	->	The default is 0 for not disabled and 1 for disabled. 
-// 						Disabling improves performance but increases the risk of duplicates (title and strref).
-// -----------------------------------------------------------------------------------------------------------------
+// 						Disabling improves slightly performance but increases the risk of duplicates (title and strref).
+// ---------------------------------------------------------------------------------------------------------------------
 DEFINE_DIMORPHIC_FUNCTION ~IWDEE_SEQUENCE_TEXTPOS_AND_TITLE~
 	INT_VAR
 		deactivateChecks 	= 0
@@ -33,6 +33,16 @@ BEGIN
 	ACTION_IF NOT(GAME_IS ~iwdee~) THEN
 	BEGIN
 		FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE -> This function can only be used for Icewind Dale Enhanced Edition.~
+	END
+	// Checks if the sanity flag is not a negative number.
+	ACTION_IF (~%deactivateChecks%~ < 0) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE ->The argument '%deactivateChecks%' for deactivateChecks is too small. The minimum allowed number is 0. Please adjust the deactivateChecks value to be within the allowed range(0 or 1).~
+	END
+	// Checks if the sanity flag is not too high.
+	ACTION_IF (~%deactivateChecks%~ > 1) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION IWDEE_SEQUENCE_TEXTPOS_AND_TITLE ->The argument '%deactivateChecks%' for deactivateChecks is too large. The maximum allowed number is 1. Please adjust the deactivateChecks value to be within the allowed range(0 or 1).~
 	END
 	
 	// INITIALIZES NEW LINE
