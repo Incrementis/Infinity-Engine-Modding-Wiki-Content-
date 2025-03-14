@@ -128,13 +128,13 @@ BEGIN
 	// macOS
 	ACTION_IF (~%WEIDU_OS%~ STRING_EQUAL ~osx~) THEN
 	BEGIN
-		OUTER_SPRINT NL ~%MNL%~
+		OUTER_SPRINT OSnewLine ~%MNL%~
 		OUTER_SPRINT newline  ~%OSnewLine%~ 
 	END ELSE
 	// Linux
 	ACTION_IF (~%WEIDU_OS%~ STRING_EQUAL ~unix~) THEN
 	BEGIN
-		OUTER_SPRINT NL ~%LNL%~
+		OUTER_SPRINT OSnewLine ~%LNL%~
 		OUTER_SPRINT newline  ~%OSnewLine%~
 	END ELSE BEGIN
 		FAIL ~DEFINE_DIMORPHIC_FUNCTION RETRIEVE_NEWLINE -> Unsupported operating system: "%WEIDU_OS%". Unable to determine newline character.~
