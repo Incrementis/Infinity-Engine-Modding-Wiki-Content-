@@ -14,7 +14,8 @@
 // arrayName		->	Array containing sequence information. Each element should be formatted as:
 //              		~<title> <strref of text> <x-coordinate> <y-coordinate> <textarea width> <textarea height>~
 //              		Example: ~Fighter 44 700 218 156 161~
-//              		Refer to ACTION_DEFINE_ARRAY in WeiDU for array details.
+//              		Refer to ACTION_DEFINE_ARRAY in WeiDU for array details. 
+//						The title must not contain any spaces.
 // deactivateChecks	->	The default is 0 for not disabled and 1 for disabled. 
 // 						Disabling improves slightly performance but increases the risk of duplicates (title and strref).
 // ---------------------------------------------------------------------------------------------------------------------

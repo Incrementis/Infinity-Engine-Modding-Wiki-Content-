@@ -1,0 +1,28 @@
+BACKUP ~./weidu_external/fileHandlingTest/backup~
+AUTHOR ~YOUR NAME~
+VERSION ~v0.0.0~
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/fileHandling.tph~
+	
+END// End of "ALWAYS"
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN ~Create-File-Testing~
+
+// Function call
+LAF ~RETRIEVE_NEWLINE~
+	RET
+		NL = newline
+END
+
+// Print result
+PRINT ~First line %NL% Second line~

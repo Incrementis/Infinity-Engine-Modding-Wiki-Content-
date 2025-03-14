@@ -109,3 +109,34 @@ BEGIN
 	END// End of "ACTION_BASH_FOR"
 
 END// End of "CHANGE_EXTENSION"
+
+
+// Purpose: Retrieves the appropriate newline character sequence based on the detected operating system.
+//          This function abstracts away the platform-specific newline variations (Windows: WNL, macOS: MNL, Linux: LNL)
+//          as defined in the WeiDU documentation, providing a consistent way to handle line endings.
+// ---------------------------------------------------------------------------------------------------------------------
+DEFINE_DIMORPHIC_FUNCTION ~RETRIEVE_NEWLINE~
+	RET
+		newline
+BEGIN
+	// Windows
+	ACTION_IF (~%WEIDU_OS%~ STRING_EQUAL ~win32~) THEN
+	BEGIN
+		OUTER_SPRINT OSnewLine ~%WNL%~
+		OUTER_SPRINT newline  ~%OSnewLine%~ 
+	END ELSE
+	// macOS
+	ACTION_IF (~%WEIDU_OS%~ STRING_EQUAL ~osx~) THEN
+	BEGIN
+		OUTER_SPRINT NL ~%MNL%~
+		OUTER_SPRINT newline  ~%OSnewLine%~ 
+	END ELSE
+	// Linux
+	ACTION_IF (~%WEIDU_OS%~ STRING_EQUAL ~unix~) THEN
+	BEGIN
+		OUTER_SPRINT NL ~%LNL%~
+		OUTER_SPRINT newline  ~%OSnewLine%~
+	END ELSE BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION RETRIEVE_NEWLINE -> Unsupported operating system: "%WEIDU_OS%". Unable to determine newline character.~
+	END
+END
