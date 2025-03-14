@@ -115,6 +115,9 @@ END// End of "CHANGE_EXTENSION"
 //          This function abstracts away the platform-specific newline variations (Windows: WNL, macOS: MNL, Linux: LNL)
 //          as defined in the WeiDU documentation, providing a consistent way to handle line endings.
 // ---------------------------------------------------------------------------------------------------------------------
+// Parameters:|
+// ============
+// newline	-> Returns the newline
 DEFINE_DIMORPHIC_FUNCTION ~RETRIEVE_NEWLINE~
 	RET
 		newline
