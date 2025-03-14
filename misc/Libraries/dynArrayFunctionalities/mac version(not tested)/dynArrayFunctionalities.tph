@@ -73,9 +73,9 @@ BEGIN
 	COPY ~./weidu_external/workspace/!_temporaryPatchArray.tph~ ~./weidu_external/%MOD_FOLDER%/temp/arrays/!_patch%!_setArrayName%.tph~  EVALUATE_BUFFER
 	
 	
-	// Includes array element slots as variables into the array (%MNL% means Macintosh New Line)
+	// Includes array element slots as variables into the array (%LNL% means Unix New Line)
 	OUTER_FOR(index = 0; index < ~!_slotNumbers~; ++index) BEGIN	
-		OUTER_SPRINT ~!_arraySlots~ ~%!_arraySlots%	"%%!_setArrayName%%index%%"%MNL%~	
+		OUTER_SPRINT ~!_arraySlots~ ~%!_arraySlots%	"%%!_setArrayName%%index%%"%LNL%~	
 	END
 	APPEND_OUTER ~./weidu_external/%MOD_FOLDER%/temp/arrays/!_%!_setArrayName%.tph~ ~%!_arraySlots%~
 	APPEND_OUTER ~./weidu_external/%MOD_FOLDER%/temp/arrays/!_patch%!_setArrayName%.tph~ ~%!_arraySlots%~
@@ -195,16 +195,16 @@ BEGIN
 		ACTION_IF (~%!_arrayValue%~ > "-1") THEN 
 		BEGIN
 			// Positive values including 0
-			OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%MNL%~~~~~
+			OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%LNL%~~~~~
 		END	ELSE 
 		BEGIN
 			// Negative values
-			OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SET ~%!_useArrayName%%!_position%~ = "%!_arrayValue%"%MNL%~~~~~
+			OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SET ~%!_useArrayName%%!_position%~ = "%!_arrayValue%"%LNL%~~~~~
 		END
 	// If value is not integer then it is string
 	END ELSE 
 	BEGIN		
-		OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SPRINT ~%!_useArrayName%%!_position%~ ~%!_arrayValue%~%MNL%~~~~~
+		OUTER_SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% OUTER_SPRINT ~%!_useArrayName%%!_position%~ ~%!_arrayValue%~%LNL%~~~~~
 	END
 	
 	// If all values are collected then write it into array
@@ -303,16 +303,16 @@ BEGIN
 		PATCH_IF (~%!_arrayValue%~ > "-1") THEN 
 		BEGIN
 			// Positive values including 0
-			SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%MNL%~~~~~
+			SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SET ~%!_useArrayName%%!_position%~ = %!_arrayValue%%LNL%~~~~~
 		END	ELSE 
 		BEGIN
 			// Negative values
-			SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SET ~%!_useArrayName%%!_position%~ = "%!_arrayValue%"%MNL%~~~~~	
+			SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SET ~%!_useArrayName%%!_position%~ = "%!_arrayValue%"%LNL%~~~~~	
 		END		
 	// If value is not integer then it is string
 	END ELSE 
 	BEGIN	
-		SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SPRINT ~%!_useArrayName%%!_position%~ ~%!_arrayValue%~%MNL%~~~~~
+		SPRINT ~!_bufferValue~ ~~~~~%!_bufferValue% SPRINT ~%!_useArrayName%%!_position%~ ~%!_arrayValue%~%LNL%~~~~~
 	END
 	
 	// If all values are collected then write it into array

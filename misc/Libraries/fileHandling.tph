@@ -112,7 +112,7 @@ END// End of "CHANGE_EXTENSION"
 
 
 // Purpose: Retrieves the appropriate newline character sequence based on the detected operating system.
-//          This function abstracts away the platform-specific newline variations (Windows: WNL, macOS: MNL, Linux: LNL)
+//          This function abstracts away the platform-specific newline variations (Windows: WNL, macOS: LNL, Linux: LNL)
 //          as defined in the WeiDU documentation, providing a consistent way to handle line endings.
 // ---------------------------------------------------------------------------------------------------------------------
 // Parameters:|
@@ -131,7 +131,7 @@ BEGIN
 	// macOS
 	ACTION_IF (~%WEIDU_OS%~ STRING_EQUAL ~osx~) THEN
 	BEGIN
-		OUTER_SPRINT OSnewLine ~%MNL%~
+		OUTER_SPRINT OSnewLine ~%LNL%~
 		OUTER_SPRINT newline  ~%OSnewLine%~ 
 	END ELSE
 	// Linux
