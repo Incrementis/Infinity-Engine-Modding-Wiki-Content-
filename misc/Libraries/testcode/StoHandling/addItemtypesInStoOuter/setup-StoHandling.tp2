@@ -21,14 +21,14 @@ BEGIN "Testing STO Handling"
 // -----------
 ACTION_DEFINE_ARRAY StoTestSingleArray
 BEGIN
-	36777//~Gem Bag~(IWDEE)
-	10235//~The Evening Shade~(IWDEE)
+	~EHPOMAB~
+	~KUOSWALD~
 END
 
 ACTION_DEFINE_ARRAY StoTestGroupArray
 BEGIN
-	~Gem Bag~
-	~The Evening Shade~
+	36777//~Gem Bag~(IWDEE)
+	10235//~The Evening Shade~(IWDEE)
 END
 
 // TEST1: Manipulating group STOs and single STOs
