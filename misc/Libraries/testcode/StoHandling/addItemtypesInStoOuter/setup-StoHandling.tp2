@@ -1,0 +1,103 @@
+BACKUP "weidu_external\StoHandling\backup\"
+AUTHOR "YOU"
+VERSION "0.0.0"
+AUTO_EVAL_STRINGS
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/StoHandling.tph~
+	
+END// End of "ALWAYS"
+// -----------
+// Start Tests
+// -----------
+BEGIN "Testing STO Handling"
+
+// INIT ARRAYS
+// -----------
+ACTION_DEFINE_ARRAY StoTestSingleArray
+BEGIN
+	36777//~Gem Bag~(IWDEE)
+	10235//~The Evening Shade~(IWDEE)
+END
+
+ACTION_DEFINE_ARRAY StoTestGroupArray
+BEGIN
+	~Gem Bag~
+	~The Evening Shade~
+END
+
+// TEST1: Manipulating group STOs and single STOs
+// ---------------------------------------------
+
+LAF ADD_ITEMTYPES_IN_STO
+	INT_VAR
+		itemtype 		= 75
+	STR_VAR
+		singleStoArray 	= "StoTestSingleArray"
+		groupStoArray 	= "StoTestGroupArray"
+END
+
+
+// TEST2: Manipulating group STOs
+// ------------------------------
+/*
+LAF ADD_ITEMTYPES_IN_STO
+	INT_VAR
+		itemtype 		= 75
+	STR_VAR
+		groupStoArray 	= "StoTestGroupArray"
+END
+*/
+
+// TEST3: Manipulating single STOs
+// -------------------------------
+/*
+LAF ADD_ITEMTYPES_IN_STO
+	INT_VAR
+		itemtype 		= 75
+	STR_VAR
+		singleStoArray 	= "StoTestSingleArray"
+END
+*/
+
+// TEST4: Manipulating group STOs and single STOs(exclusion)
+// ---------------------------------------------------------
+/*
+LAF ADD_ITEMTYPES_IN_STO
+	INT_VAR
+		itemtype 		= 75
+		invertSelection = 1
+	STR_VAR
+		singleStoArray 	= "StoTestSingleArray"
+		groupStoArray 	= "StoTestGroupArray"
+END
+*/
+
+// TEST5: Manipulating group STOs(exclusion)
+// -----------------------------------------
+/*
+LAF ADD_ITEMTYPES_IN_STO
+	INT_VAR
+		itemtype 		= 75
+		invertSelection = 1
+	STR_VAR
+		groupStoArray 	= "StoTestGroupArray"
+END
+*/
+
+// TEST6: Manipulating single STOs(exclusion)
+// ------------------------------------------
+/*
+LAF ADD_ITEMTYPES_IN_STO
+	INT_VAR
+		itemtype 		= 75
+		invertSelection = 1
+	STR_VAR
+		singleStoArray 	= "StoTestSingleArray"
+END
+*/

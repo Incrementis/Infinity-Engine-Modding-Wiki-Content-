@@ -1,0 +1,155 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+//--------------------------------------------------------//
+// Contains self defined STO files related functionalities//
+//--------------------------------------------------------//
+
+
+
+// Purpose: Adds a purchasable item type to specified STO files, either by filename or group name.
+//          Allows for combined selection and inverted selection (exclusion) of STO files. 
+// --------------------------------------------------------------------------------------------------
+// Parameters:|
+// ============
+// itemtype        -> The item type (category) as an integer value, used as a purchasable item type in STO.
+// invertSelection -> If set to 1, inverts the selection of STO files in groupStoArray and singleStoArray, 
+//                    adding the item type to all STOs EXCEPT those specified in the arrays.
+// groupStoArray   -> An array of STO names (not filenames, but strrefs), used to identify groups of STO files.
+// singleStoArray  -> An array of STO filenames (resrefs), e.g., "KUOSWALD.sto" (without the ".sto" extension).
+DEFINE_DIMORPHIC_FUNCTION ~ADD_ITEMTYPES_IN_STO~
+	INT_VAR
+		itemtype 		= "-1"
+		invertSelection = 0
+	STR_VAR
+		groupStoArray 	= "!_NULL"
+		singleStoArray 	= "!_NULL"
+BEGIN
+	// Checks that itemtype is not a negative number, because there are no negative itemtype numbers.
+	ACTION_IF (~%itemtype%~ < 0) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPES_IN_STO -> The argument '%itemtype%' for itemtype is too small. The minimum allowed number is 0, because there are no negative itemtype numbers in game. Please adjust the itemtype value to be within the allowed range.~
+	END
+	// Checks if itemtype is within 2-byte unsigned integer value
+	ACTION_IF (~%itemtype%~ > 65535) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPES_IN_STO -> The value '%itemtype%' for itemtype exceeds 2MB. The maximum number of allowed item types is 65536~
+	END
+	// Checks if the invertSelection is not a negative number.
+	ACTION_IF (~%invertSelection%~ < 0) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPES_IN_STO -> The argument '%invertSelection%' for invertSelection is too small. The minimum allowed number is 0. Please adjust the invertSelection value to be within the allowed range(0 or 1).~
+	END
+	// Checks if the invertSelection is not too high.
+	ACTION_IF (~%invertSelection%~ > 1) THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPES_IN_STO ->The argument '%invertSelection%' for invertSelection is too large. The maximum allowed number is 1. Please adjust the invertSelection value to be within the allowed range(0 or 1).~
+	END
+	// Checks if no arrays are defined.
+	ACTION_IF (~%groupStoArray%~ STRING_EQUAL "!_NULL") AND (~%singleStoArray%~ STRING_EQUAL "!_NULL") THEN
+	BEGIN
+		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPES_IN_STO -> Either groupStoArray nor singleStoArray are defined. The value for both is !_NULL.~
+	END
+	
+	// ADDS ITEMTYPE TO SELECTED STOs
+	// ------------------------------
+	ACTION_IF (invertSelection == 0) THEN
+	BEGIN 		
+		// ---Add item type by STO filenames (resrefs).
+		ACTION_IF NOT(~%singleStoArray%~ STRING_EQUAL "!_NULL") THEN
+		BEGIN
+			OUTER_FOR (stoIndex=0; VARIABLE_IS_SET $~%singleStoArray%~(~%stoIndex%~); ++stoIndex)
+			BEGIN
+				OUTER_SPRINT singleSto  $~%singleStoArray%~(~%stoIndex%~)
+				COPY_EXISTING ~%singleSto%.sto~ override
+					// WeiDU intern function.
+					LPF ADD_STORE_PURCHASE
+						INT_VAR
+							category 	= ~%itemtype%~
+						RET
+							typeIndex 	= index 	// Not really needed
+						 	newOffset 	= offset 	// Not really needed
+					END				
+				BUT_ONLY
+			END
+		END
+		
+		// ---Add item type by STO group names(strrefs).
+		ACTION_IF NOT(~%groupStoArray%~ STRING_EQUAL "!_NULL") THEN
+		BEGIN
+			// Iterates over all STO files in game.
+			COPY_EXISTING_REGEXP ~.*\.sto~ override
+				// Iterates over all the user input STO names and adds purchasable itemtype into them.
+				FOR (stoIndex=0; VARIABLE_IS_SET $~%groupStoArray%~(~%stoIndex%~); ++stoIndex) 
+				BEGIN		
+					SET 		groupSto =	$~%groupStoArray%~(~%stoIndex%~)
+					READ_LONG  	0x000c 		strrefStoName					
+					
+					PATCH_IF (~%strrefStoName%~ == ~%groupSto%~) THEN
+					BEGIN
+						// WeiDU intern function.
+						LPF ADD_STORE_PURCHASE 
+						INT_VAR
+							category 	= ~%itemtype%~
+						RET
+							typeIndex 	= index 	// Not really needed
+						 	newOffset 	= offset 	// Not really needed
+						END
+					END									
+				END
+			BUT_ONLY
+		END
+	END// End of "ACTION_IF (invertSelection == 0)"
+	
+	// ADDS ITEMTYPE TO ALL STOs EXCEPT THOSE SPECIFIED
+	// ------------------------------------------------
+	ACTION_IF (invertSelection == 1) THEN
+	BEGIN			
+		// Iterates over all ingame sto files
+		COPY_EXISTING_REGEXP ~.*\.sto~ override
+			// Flag for any if-statement in loops is true or false.
+			SET stoExists = 0
+			
+			// ---Check for STO filenames (resrefs) to exclude.
+			PATCH_IF NOT(~%singleStoArray%~ STRING_EQUAL "!_NULL") THEN
+			BEGIN
+				FOR (stoIndex=0; VARIABLE_IS_SET $~%singleStoArray%~(~%stoIndex%~); ++stoIndex) 
+				BEGIN				
+					SPRINT singleSto $~%singleStoArray%~(~%stoIndex%~)
+					
+					PATCH_IF (~%SOURCE_RES%~ STRING_EQUAL_CASE ~%singleSto%~) THEN
+					BEGIN
+						SET stoExists = 1
+					END									
+				END
+			END
+			
+			// ---Check for STO group names(strrefs) to exclude.
+			PATCH_IF NOT(~%groupStoArray%~ STRING_EQUAL "!_NULL") THEN
+			BEGIN
+				FOR (stoIndex=0; VARIABLE_IS_SET $~%groupStoArray%~(~%stoIndex%~); ++stoIndex) 
+				BEGIN
+					SET 		groupSto =	$~%groupStoArray%~(~%stoIndex%~)
+					READ_LONG  	0x000c 		strrefStoName
+					
+					PATCH_IF (~%strrefStoName%~ == ~%groupSto%~) THEN
+					BEGIN
+						SET stoExists = 1
+					END									
+				END
+			END
+			
+			// Add item type if STO is not in exclusion lists.
+			PATCH_IF (~%stoExists%~ == 0) THEN
+			BEGIN
+				// WeiDU intern function.
+				LPF ADD_STORE_PURCHASE
+					INT_VAR
+						category 	= ~%itemtype%~
+					RET
+						typeIndex 	= index 	// Not really needed
+						newOffset 	= offset 	// Not really needed
+				END
+			END		
+		BUT_ONLY	
+	END// End of "ACTION_IF (invertSelection == 1)"
+
+END// End of "ADD_ITEMTYPES_IN_STO"
