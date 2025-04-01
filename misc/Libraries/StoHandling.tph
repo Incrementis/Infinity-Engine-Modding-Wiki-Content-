@@ -48,6 +48,22 @@ BEGIN
 	BEGIN
 		FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPES_IN_STO -> Either groupStoArray nor singleStoArray are defined. The value for both is !_NULL.~
 	END
+	// Checks if strref array contains not integers in it. 
+	ACTION_IF NOT(~%groupStoArray%~ STRING_EQUAL "!_NULL") THEN
+	BEGIN
+		OUTER_FOR (intIndex=0; VARIABLE_IS_SET $~%groupStoArray%~(~%intIndex%~); ++intIndex)
+		BEGIN
+			// Uses a string data type to retrieve the integer value to prevent WeiDU errors in advance.
+			OUTER_SPRINT actuallyAnInt $~%groupStoArray%~(~%intIndex%~)
+			PRINT ~%actuallyAnInt%~
+			// A number defined in quotation marks or tildes will still be considered an integer by WeiDU.
+			ACTION_IF NOT(IS_AN_INT ~%groupStoArray%~) THEN
+			BEGIN
+				FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPES_IN_STO -> The groupStoArray parameter is set as the argument "%groupStoArray%". The value %actuallyAnInt% is not an integer, but strref must be set as an integer.~
+			END
+		END
+	END
+	
 	
 	// ADDS ITEMTYPE TO SELECTED STOs
 	// ------------------------------
