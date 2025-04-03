@@ -55,9 +55,8 @@ BEGIN
 		BEGIN
 			// Uses a string data type to retrieve the integer value to prevent WeiDU errors in advance.
 			OUTER_SPRINT actuallyAnInt $~%groupStoArray%~(~%intIndex%~)
-			PRINT ~%actuallyAnInt%~
 			// A number defined in quotation marks or tildes will still be considered an integer by WeiDU.
-			ACTION_IF NOT(IS_AN_INT ~%groupStoArray%~) THEN
+			ACTION_IF NOT(IS_AN_INT ~%actuallyAnInt%~) THEN
 			BEGIN
 				FAIL ~DEFINE_DIMORPHIC_FUNCTION ADD_ITEMTYPES_IN_STO -> The groupStoArray parameter is set as the argument "%groupStoArray%". The value %actuallyAnInt% is not an integer, but strref must be set as an integer.~
 			END
