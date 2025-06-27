@@ -1,0 +1,64 @@
+// Main-Source: https://github.com/Gibberlings3/ItemRevisions/blob/master/item_rev/lib/macros.tpa
+// Main-Source code is heavily modified to serve personal needs.
+
+// Purpose: Adds an default item ability section
+// ---------------------------------------------
+DEFINE_PATCH_FUNCTION ~SIMP_ADD_ITEM_HEADER~
+BEGIN
+  hs      =   0x38
+  READ_LONG   0x64 ho // Abilities offset
+  READ_SHORT  0x68 hc // Number of abilities
+  READ_LONG   0x6a eo // Effects offset
+
+  copy_header = hc
+  insert_point= 0
+
+  INSERT_BYTES ho hs
+  
+  hc+=1 // We are incrementing the number of abilities 
+  eo+=hs
+
+  WRITE_SHORT 0x68 hc // Number of abilities
+  WRITE_LONG  0x6a eo // Effects offset
+  READ_SHORT  0x70 ei // Number of global effects (technically, it is a counter )
+
+  // This "for" loop will only trigger when at least a second ability is generated?!
+  // This is definitely needed or else EQ-Effcts will be used as item ability effects and 
+  // item ability effects will be set as EQ-Effects.
+  FOR (i=ho;i<ho+hc*hs;i+=hs) BEGIN
+    READ_SHORT i+0x1e ec
+    WRITE_SHORT i+0x20 ei
+    ei+=ec
+  END
+
+  off     =     ho          // Abilities offset
+  WRITE_BYTE    off       0 // type
+  WRITE_BYTE    off+0x1   0 // required_id
+  WRITE_BYTE    off+0x2   3 // location
+  WRITE_BYTE    off+0x3   0 // alt_dicesize
+  WRITE_ASCIIE  off+0x4   ~~// ~%icon%~ (8)
+  WRITE_BYTE    off+0xc   0 // target
+  WRITE_BYTE    off+0xd   0 // target_count
+  WRITE_SHORT   off+0xe   0 // range
+  WRITE_BYTE    off+0x10  0 // projectile_type
+  WRITE_BYTE    off+0x11  0 // alt_dicenumber
+  WRITE_BYTE    off+0x12  0 // speed
+  WRITE_BYTE    off+0x13  0 // alt_damage
+  WRITE_SHORT   off+0x14  0 // thaco
+  WRITE_BYTE    off+0x16  0 // dicesize
+  WRITE_BYTE    off+0x17  0 // school
+  WRITE_BYTE    off+0x18  0 // dicenumber
+  WRITE_BYTE    off+0x19  0 // sectype
+  WRITE_SHORT   off+0x1a  0 // damage
+  WRITE_SHORT   off+0x1c  0 // damage_type
+  WRITE_SHORT   off+0x22  0 // charges
+  WRITE_SHORT   off+0x24  0 // depletion
+  WRITE_LONG    off+0x26  0 // flags
+  WRITE_SHORT   off+0x2a  1 // projectile
+  WRITE_SHORT   off+0x2c  0 // overhand
+  WRITE_SHORT   off+0x2e  0 // backhand
+  WRITE_SHORT   off+0x30  0 // thrust
+  WRITE_SHORT   off+0x32  0 // is_bow
+  WRITE_SHORT   off+0x34  0 // is_xbow
+  WRITE_SHORT   off+0x36  0 // is_sling
+END // End of function
