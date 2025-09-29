@@ -95,10 +95,12 @@ BEGIN
 				// Iterates over all the user input STO names and adds purchasable itemtype into them.
 				FOR (stoIndex=0; VARIABLE_IS_SET $~%groupStoArray%~(~%stoIndex%~); ++stoIndex) 
 				BEGIN		
-					SET 		groupSto =	$~%groupStoArray%~(~%stoIndex%~)
-					READ_LONG  	0x000c 		strrefStoName					
+					SET 		groupSto 			= $~%groupStoArray%~(~%stoIndex%~)
+					READ_LONG  	0x000c 				strrefStoName										
+					GET_STRREF 	~%groupSto%~ 		groupStoLookUp 
+					GET_STRREF 	~%strrefStoName%~ 	strrefStoNameLookUp
 					
-					PATCH_IF (~%strrefStoName%~ == ~%groupSto%~) THEN
+					PATCH_IF (~%groupStoLookUp%~ STRING_EQUAL ~%strrefStoNameLookUp%~) THEN
 					BEGIN
 						// WeiDU intern function.
 						LPF ADD_STORE_PURCHASE 
@@ -142,10 +144,12 @@ BEGIN
 			BEGIN
 				FOR (stoIndex=0; VARIABLE_IS_SET $~%groupStoArray%~(~%stoIndex%~); ++stoIndex) 
 				BEGIN
-					SET 		groupSto =	$~%groupStoArray%~(~%stoIndex%~)
-					READ_LONG  	0x000c 		strrefStoName
+					SET 		groupSto 			= $~%groupStoArray%~(~%stoIndex%~)
+					READ_LONG  	0x000c 				strrefStoName
+					GET_STRREF 	~%groupSto%~ 		groupStoLookUp 
+					GET_STRREF 	~%strrefStoName%~ 	strrefStoNameLookUp 
 					
-					PATCH_IF (~%strrefStoName%~ == ~%groupSto%~) THEN
+					PATCH_IF (~%groupStoLookUp%~ STRING_EQUAL ~%strrefStoNameLookUp%~) THEN
 					BEGIN
 						SET stoExists = 1
 					END									
