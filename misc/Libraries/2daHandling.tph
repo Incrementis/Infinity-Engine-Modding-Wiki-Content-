@@ -55,24 +55,23 @@ BEGIN
 			SET numCols = 4
 		END	
 		// Reads the entire 2DA content into memory.
-		READ_2DA_ENTRIES_NOW ~itemtypes~ ~%numCols%~
+		READ_2DA_ENTRIES_NOW ~itemtypes_table~ ~%numCols%~
 		
-		FOR (rowIndex = 0; rowIndex < itemtypes; ++rowIndex) BEGIN
+		FOR (rowIndex = 0; rowIndex < itemtypes_table; ++rowIndex) BEGIN
 			// Gets the unique identifier for the item type from the list of item types.
-			READ_2DA_ENTRY_FORMER itemtypes rowIndex 0 itemTypeId
+			READ_2DA_ENTRY_FORMER itemtypes_table rowIndex 0 itemTypeId
 			// Creates an array of item type reference numbers from the first column.
 			SPRINT $itemtypes("%rowIndex%") "%itemTypeId%"
 		END
 		
 		// Finds the highest item type reference number. 
 		SET ~maxTypeNumber~ = 0
-		PHP_EACH itemtypes AS key => value BEGIN
-			
-			PATCH_IF (~%maxTypeNumber%~ < ~%value%~) THEN
+		PHP_EACH itemtypes AS key => value BEGIN		
+			PATCH_IF (IS_AN_INT ~%value%~) && (~%maxTypeNumber%~ < ~%value%~) THEN
 			BEGIN
 				SET ~maxTypeNumber~ = ~%value%~
 			END
-		END		
+		END
 		
 		// Calculates the new item type by incrementing the existing value.
 		// This works because hex value begins by 0x00.
