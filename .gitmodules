@@ -1,0 +1,3 @@
+[submodule "Z-IEMWC000-SUB_REPO"]
+	path = Z-IEMWC000-SUB_REPO
+	url = https://github.com/Incrementis/Z-IEMWC000-SUB_REPO.git
