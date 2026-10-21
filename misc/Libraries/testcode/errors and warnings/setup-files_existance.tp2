@@ -45,7 +45,7 @@ END
 
 // OUTSIDE OF PATCHING
 // -------------------
-OUTER_SPRINT warning @2147483644
+OUTER_SPRINT warning @1073741820
 
 // Checks all files
 OUTER_FOR (index = 0; VARIABLE_IS_SET $files(~%index%~); ++index) BEGIN
@@ -64,7 +64,7 @@ END
 // PATCHING ITEM TESTFILE
 // ----------------------
 COPY_EXISTING ~Testfile.ITM~ ~%MOD_FOLDER%~
-SPRINT warning @2147483644
+SPRINT warning @1073741820
 
 // Checks all files
 FOR (index = 0; VARIABLE_IS_SET $files(~%index%~); ++index) BEGIN

@@ -1,2 +1,3 @@
 @1073741822=~Modifikations-kompatibilität ist unsicher. Trotz erfolgreicher Installation, kann die reibungslose Funktionalität nicht garantiert werden. Falls die Installation Fehler generiert, kann die Kompatibilität eine der Ursachen sein.~
 @1073741820=~SOD zip wurde erkannt! Die Installation von Modmerge oder DLCmerger wird vermutlich benötigt. Trotz erfolgreicher Installation, kann die reibungslose Funktionalität nicht garantiert werden.~
+@1073741818=~Die Mod-Datei %tp2% sowie die Komponente %component% aus einer anderen Mod wurden nicht erkannt. Es wird die Standardversion installiert.~

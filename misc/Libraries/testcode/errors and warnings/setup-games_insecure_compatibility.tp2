@@ -63,7 +63,7 @@ END
 
 // OUTSIDE OF PATCHING
 // -------------------
-OUTER_SPRINT warning @2147483646
+OUTER_SPRINT warning @1073741822
 
 // Checks all game shortcuts
 OUTER_FOR (index = 0; VARIABLE_IS_SET $games_insecure_compatibility(~%index%~); ++index) BEGIN
@@ -83,7 +83,7 @@ END
 // PATCHING ITEM TESTFILE
 // ----------------------
 COPY_EXISTING ~Testfile.ITM~ ~%MOD_FOLDER%~
-SPRINT warning @2147483646
+SPRINT warning @1073741822
 
 // Checks all game shortcuts
 FOR (index = 0; VARIABLE_IS_SET $games_insecure_compatibility(~%index%~); ++index) BEGIN

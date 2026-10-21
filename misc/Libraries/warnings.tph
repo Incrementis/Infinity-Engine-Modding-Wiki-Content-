@@ -43,3 +43,29 @@ BEGIN
         PRINT ~%message%~
 	END
 END // End of "WARN_EVALUATE_GAME_EXISTANCE"
+
+
+// Purpose: Raises a warning if the specified WeiDU mod and component is detected
+// ------------------------------------------------------------------------------
+// Parameters:|
+// ============
+// tp2 		-> The WeiDU mod modTp2Name identifier to check for existence
+// component-> The WeiDU mod component number to check for existence
+// message	-> The warning message to display if the specified mod and component is detected
+DEFINE_DIMORPHIC_FUNCTION ~WARN_EVALUATE_MOD_EXISTANCE~
+	INT_VAR
+		component	= "-1"
+	STR_VAR
+		tp2 		= ~~
+		message 	= ~~
+BEGIN
+	ACTION_IF (NOT MOD_IS_INSTALLED ~%tp2%~ ~%component%~) THEN 
+	BEGIN
+		OUTER_SPRINT message EVAL ~%message%~
+		
+        PRINT ~--------~
+		PRINT ~WARNING:~
+        PRINT ~--------~
+        PRINT ~%message%~
+	END
+END // End of "WARN_EVALUATE_MOD_EXISTANCE"

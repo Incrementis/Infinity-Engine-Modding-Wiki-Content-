@@ -1,2 +1,3 @@
 @1073741822=~Insecure game compatibility detected! No guarantee for smooth functionality in case of successful installation. If you encounter an error after installation, this may be the cause.~
 @1073741820=~SOD zip detected! Installation of Modmerge or DLCmerger is possibly needed. No guarantee for smooth functionality in case of successful installation. If you encounter an error after installation, this may be the cause.~
+@1073741818=~Mod file %tp2% and component %component% from another mod were not detected. The default version will be installed.~

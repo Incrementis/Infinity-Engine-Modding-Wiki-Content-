@@ -64,7 +64,7 @@ END
 /*
 // OUTSIDE OF PATCHING
 // -------------------
-OUTER_SPRINT error @2147483647
+OUTER_SPRINT error @1073741823
 
 // Checks all game shortcuts
 OUTER_FOR (index = 0; VARIABLE_IS_SET $games_incompatible(~%index%~); ++index) BEGIN
@@ -84,7 +84,7 @@ END
 // PATCHING ITEM TESTFILE
 // ----------------------
 COPY_EXISTING ~Testfile.ITM~ ~%MOD_FOLDER%~
-SPRINT error @2147483647
+SPRINT error @1073741823
 
 FOR (index = 0; VARIABLE_IS_SET $games_incompatible(~%index%~); ++index) BEGIN
 

@@ -1,0 +1,69 @@
+// Never Forget: Comments can "lie", but code not so much ;P
+BACKUP ~./weidu_external/files_existance/backup~ // %MOD_FOLDER% doesn't work here
+AUTHOR ~YOU~
+VERSION ~v0.0.0~
+//AUTO_EVAL_STRINGS// This will prevent the need of EVAL for string variables
+
+
+// --------------
+// Initialization
+// --------------
+ALWAYS 
+	// LIBRARY INCLUDES(Don't change these)
+	// ------------------------------------
+	INCLUDE ~%MOD_FOLDER%/lib/warnings.tph~
+	
+	// CREATING ITEM FILE(for testing patch version)
+	// ----------------------------------------------
+	CREATE ~ITM~ ~Testfile~
+	
+END// End of "ALWAYS"
+
+
+LANGUAGE
+	~English~	// Language
+	~English~	// Directory
+	~%MOD_FOLDER%/en_US/!_warnings.tra~
+	
+LANGUAGE
+	~Deutsch~	// Language
+	~German~	// Directory
+	~%MOD_FOLDER%/de_DE/!_warnings.tra~
+
+
+// -----------
+// Start Tests
+// -----------
+BEGIN ~Mod existance~
+
+// OUTSIDE OF PATCHING
+// -------------------
+OUTER_SPRINT warning 		@1073741818
+OUTER_SPRINT modTp2 		~cd_iwd_desc.tp2~
+OUTER_SET modComponent 		= 1
+
+// Calls warning
+LAF WARN_EVALUATE_MOD_EXISTANCE 
+	INT_VAR
+		component = ~%modComponent%~
+	STR_VAR
+		tp2 	= EVAL ~%modTp2%~
+		message = EVAL ~%warning%~
+	END
+
+
+// PATCHING ITEM TESTFILE
+// ----------------------
+COPY_EXISTING ~Testfile.ITM~ ~%MOD_FOLDER%~
+SPRINT warning 		@1073741818
+SPRINT modTp2 		~cd_iwd_desc.tp2~
+SET modComponent 	= 1
+
+// Calls warning
+LPF WARN_EVALUATE_MOD_EXISTANCE 
+	INT_VAR
+		component = ~%modComponent%~
+	STR_VAR
+		tp2 	= EVAL ~%modTp2%~
+		message = EVAL ~%warning%~
+	END
